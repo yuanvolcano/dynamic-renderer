@@ -3,8 +3,6 @@ export interface IComponentConfig {
   id: string;
   componentName: string;
   props?: Record<string, any>;
-  style?: Record<string, any>;
-  class?: string;
   children?: IComponentConfig[];
 }
 
