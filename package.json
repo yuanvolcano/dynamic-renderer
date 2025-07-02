@@ -1,0 +1,54 @@
+{
+  "name": "cross-platform-dynamic-ui",
+  "version": "1.0.0",
+  "description": "跨平台动态UI构建平台，支持H5和微信小程序",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev:h5": "vite",
+    "dev:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin vite",
+    "build:h5": "vite build",
+    "build:mp-weixin": "cross-env UNI_PLATFORM=mp-weixin vite build",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "uniapp",
+    "vue3",
+    "typescript",
+    "cross-platform",
+    "dynamic-ui",
+    "h5",
+    "wechat-miniprogram"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.11.1",
+  "dependencies": {
+    "@dcloudio/uni-app": "3.0.0-alpha-4070420250630002",
+    "@dcloudio/uni-components": "3.0.0-alpha-4070420250630002",
+    "@dcloudio/uni-h5": "3.0.0-alpha-4070420250630002",
+    "@dcloudio/uni-mp-weixin": "3.0.0-alpha-4070420250630002",
+    "vue": "3.5.17"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "^3.4.15",
+    "@dcloudio/vite-plugin-uni": "3.0.0-alpha-4070420250630002",
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^24.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.30.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-vue": "^10.2.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19",
+    "vue-tsc": "^3.0.0"
+  }
+}
