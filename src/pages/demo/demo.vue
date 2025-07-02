@@ -10,30 +10,30 @@
 
       <!-- 动态渲染的组件区域 -->
       <view class="component-container">
-        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
+        <DynamicRenderer
+          v-for="component in demoComponents"
+          :key="component.id"
+          :config="component"
+        />
       </view>
     </view>
 
     <view class="actions">
-      <button class="action-btn primary" @click="addComponent">
-        添加组件
-      </button>
-      <button class="action-btn default" @click="loadPreset">
-        加载预设
-      </button>
+      <button class="action-btn primary" @click="addComponent">添加组件</button>
+      <button class="action-btn default" @click="loadPreset">加载预设</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import DynamicRenderer from '@/components/DynamicRenderer.vue'
+import { ref } from 'vue';
+import DynamicRenderer from '@/components/DynamicRenderer.vue';
 
 interface ComponentConfig {
-  id: string
-  type: string
-  props: Record<string, any>
-  children?: ComponentConfig[]
+  id: string;
+  type: string;
+  props: Record<string, any>;
+  children?: ComponentConfig[];
 }
 
 const demoComponents = ref<ComponentConfig[]>([
@@ -45,8 +45,8 @@ const demoComponents = ref<ComponentConfig[]>([
         padding: '20rpx',
         backgroundColor: '#fff',
         borderRadius: '16rpx',
-        marginBottom: '20rpx'
-      }
+        marginBottom: '20rpx',
+      },
     },
     children: [
       {
@@ -56,11 +56,11 @@ const demoComponents = ref<ComponentConfig[]>([
           content: '这是一个动态渲染的文本组件',
           style: {
             fontSize: '32rpx',
-            color: '#333'
-          }
-        }
-      }
-    ]
+            color: '#333',
+          },
+        },
+      },
+    ],
   },
   {
     id: 'demo-2',
@@ -70,16 +70,15 @@ const demoComponents = ref<ComponentConfig[]>([
       onClick: () => {
         uni.showToast({
           title: '按钮被点击了！',
-          icon: 'success'
-        })
+          icon: 'success',
+        });
       },
       style: {
-        marginBottom: '20rpx'
-      }
-    }
-
-  }
-])
+        marginBottom: '20rpx',
+      },
+    },
+  },
+]);
 
 const addComponent = () => {
   const newComponent: ComponentConfig = {
@@ -90,12 +89,12 @@ const addComponent = () => {
       style: {
         fontSize: '28rpx',
         color: '#666',
-        marginBottom: '10rpx'
-      }
-    }
-  }
-  demoComponents.value.push(newComponent)
-}
+        marginBottom: '10rpx',
+      },
+    },
+  };
+  demoComponents.value.push(newComponent);
+};
 
 const loadPreset = () => {
   // 加载预设的复杂UI结构
@@ -107,8 +106,8 @@ const loadPreset = () => {
         padding: '30rpx',
         backgroundColor: '#fff',
         borderRadius: '16rpx',
-        marginBottom: '20rpx'
-      }
+        marginBottom: '20rpx',
+      },
     },
     children: [
       {
@@ -119,9 +118,9 @@ const loadPreset = () => {
           style: {
             fontSize: '36rpx',
             fontWeight: 'bold',
-            marginBottom: '20rpx'
-          }
-        }
+            marginBottom: '20rpx',
+          },
+        },
       },
       {
         id: 'form-input',
@@ -129,9 +128,9 @@ const loadPreset = () => {
         props: {
           placeholder: '请输入内容',
           style: {
-            marginBottom: '20rpx'
-          }
-        }
+            marginBottom: '20rpx',
+          },
+        },
       },
       {
         id: 'form-button',
@@ -141,16 +140,16 @@ const loadPreset = () => {
           onClick: () => {
             uni.showToast({
               title: '表单提交成功！',
-              icon: 'success'
-            })
-          }
-        }
-      }
-    ]
-  }
+              icon: 'success',
+            });
+          },
+        },
+      },
+    ],
+  };
 
-  demoComponents.value.push(preset)
-}
+  demoComponents.value.push(preset);
+};
 </script>
 
 <style scoped>

@@ -16,24 +16,20 @@
     </view>
 
     <view class="actions">
-      <button class="action-btn primary" @click="navigateToDemo">
-        查看组件演示
-      </button>
-      <button class="action-btn default" @click="loadDynamicUI">
-        加载动态UI
-      </button>
+      <button class="action-btn primary" @click="navigateToDemo">查看组件演示</button>
+      <button class="action-btn default" @click="loadDynamicUI">加载动态UI</button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 interface Feature {
-  id: number
-  icon: string
-  title: string
-  description: string
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
 }
 
 const features = ref<Feature[]>([
@@ -41,40 +37,40 @@ const features = ref<Feature[]>([
     id: 1,
     icon: '🔧',
     title: '统一UI数据格式',
-    description: '通用的JSON格式描述UI结构'
+    description: '通用的JSON格式描述UI结构',
   },
   {
     id: 2,
     icon: '📱',
     title: '跨平台支持',
-    description: '同时支持H5和微信小程序'
+    description: '同时支持H5和微信小程序',
   },
   {
     id: 3,
     icon: '🔄',
     title: '动态渲染',
-    description: '支持动态加载和实时更新UI'
+    description: '支持动态加载和实时更新UI',
   },
   {
     id: 4,
     icon: '🧩',
     title: '组件化架构',
-    description: '可复用的预定义组件系统'
-  }
-])
+    description: '可复用的预定义组件系统',
+  },
+]);
 
 const navigateToDemo = () => {
   uni.navigateTo({
-    url: '/pages/demo/demo'
-  })
-}
+    url: '/pages/demo/demo',
+  });
+};
 
 const loadDynamicUI = () => {
   uni.showToast({
     title: '功能开发中...',
-    icon: 'none'
-  })
-}
+    icon: 'none',
+  });
+};
 </script>
 
 <style scoped>

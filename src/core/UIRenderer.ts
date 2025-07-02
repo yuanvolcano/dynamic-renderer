@@ -1,23 +1,23 @@
-import type { ComponentConfig, DynamicUISchema } from '@/types/component'
+import type { ComponentConfig, DynamicUISchema } from '@/types/component';
 
 /**
  * 动态UI渲染器核心类
  * 负责解析和管理动态UI配置
  */
 export class UIRenderer {
-  private components: Map<string, ComponentConfig> = new Map()
-  private schema: DynamicUISchema | null = null
+  private components: Map<string, ComponentConfig> = new Map();
+  private schema: DynamicUISchema | null = null;
 
   /**
    * 加载UI Schema
    * @param schema 动态UI配置数据
    */
   loadSchema(schema: DynamicUISchema): void {
-    this.schema = schema
-    this.components.clear()
+    this.schema = schema;
+    this.components.clear();
 
     // 预处理组件，建立组件映射
-    this.preprocessComponents(schema.components)
+    this.preprocessComponents(schema.components);
   }
 
   /**
@@ -26,13 +26,13 @@ export class UIRenderer {
    */
   private preprocessComponents(components: ComponentConfig[]): void {
     components.forEach(component => {
-      this.components.set(component.id, component)
+      this.components.set(component.id, component);
 
       // 递归处理子组件
       if (component.children) {
-        this.preprocessComponents(component.children)
+        this.preprocessComponents(component.children);
       }
-    })
+    });
   }
 
   /**
@@ -41,7 +41,7 @@ export class UIRenderer {
    * @returns 组件配置或undefined
    */
   getComponent(id: string): ComponentConfig | undefined {
-    return this.components.get(id)
+    return this.components.get(id);
   }
 
   /**
@@ -49,7 +49,7 @@ export class UIRenderer {
    * @returns 根组件配置数组
    */
   getRootComponents(): ComponentConfig[] {
-    return this.schema?.components || []
+    return this.schema?.components || [];
   }
 
   /**
@@ -60,15 +60,15 @@ export class UIRenderer {
   validateComponent(config: ComponentConfig): boolean {
     // 基础验证
     if (!config.id || !config.type) {
-      return false
+      return false;
     }
 
     // 验证子组件
     if (config.children) {
-      return config.children.every(child => this.validateComponent(child))
+      return config.children.every(child => this.validateComponent(child));
     }
 
-    return true
+    return true;
   }
 
   /**
@@ -77,7 +77,7 @@ export class UIRenderer {
    * @returns 克隆的组件配置
    */
   cloneComponent(config: ComponentConfig): ComponentConfig {
-    return JSON.parse(JSON.stringify(config))
+    return JSON.parse(JSON.stringify(config));
   }
 
   /**
@@ -86,10 +86,10 @@ export class UIRenderer {
    * @param updates 更新的属性
    */
   updateComponent(id: string, updates: Partial<ComponentConfig>): void {
-    const component = this.components.get(id)
+    const component = this.components.get(id);
     if (component) {
-      Object.assign(component, updates)
-      this.components.set(id, component)
+      Object.assign(component, updates);
+      this.components.set(id, component);
     }
   }
 
@@ -100,21 +100,21 @@ export class UIRenderer {
    */
   addComponent(component: ComponentConfig, parentId?: string): void {
     if (!this.validateComponent(component)) {
-      throw new Error('Invalid component configuration')
+      throw new Error('Invalid component configuration');
     }
 
-    this.components.set(component.id, component)
+    this.components.set(component.id, component);
 
     if (parentId) {
-      const parent = this.components.get(parentId)
+      const parent = this.components.get(parentId);
       if (parent) {
         if (!parent.children) {
-          parent.children = []
+          parent.children = [];
         }
-        parent.children.push(component)
+        parent.children.push(component);
       }
     } else if (this.schema) {
-      this.schema.components.push(component)
+      this.schema.components.push(component);
     }
   }
 
@@ -123,22 +123,22 @@ export class UIRenderer {
    * @param id 组件ID
    */
   removeComponent(id: string): void {
-    const component = this.components.get(id)
-    if (!component) return
+    const component = this.components.get(id);
+    if (!component) return;
 
     // 从父组件的children中移除
     if (this.schema) {
-      this.removeFromParent(this.schema.components, id)
+      this.removeFromParent(this.schema.components, id);
     }
 
     // 递归删除子组件
     if (component.children) {
       component.children.forEach(child => {
-        this.removeComponent(child.id)
-      })
+        this.removeComponent(child.id);
+      });
     }
 
-    this.components.delete(id)
+    this.components.delete(id);
   }
 
   /**
@@ -149,17 +149,17 @@ export class UIRenderer {
   private removeFromParent(components: ComponentConfig[], targetId: string): boolean {
     for (let i = 0; i < components.length; i++) {
       if (components[i].id === targetId) {
-        components.splice(i, 1)
-        return true
+        components.splice(i, 1);
+        return true;
       }
 
       if (components[i].children) {
         if (this.removeFromParent(components[i].children!, targetId)) {
-          return true
+          return true;
         }
       }
     }
-    return false
+    return false;
   }
 
   /**
@@ -167,14 +167,14 @@ export class UIRenderer {
    * @returns 完整的UI Schema
    */
   exportSchema(): DynamicUISchema | null {
-    return this.schema
+    return this.schema;
   }
 
   /**
    * 清空所有组件
    */
   clear(): void {
-    this.components.clear()
-    this.schema = null
+    this.components.clear();
+    this.schema = null;
   }
 }

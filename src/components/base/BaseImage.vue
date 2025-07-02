@@ -10,38 +10,38 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { ImageProps } from '@/types/component'
+import { computed } from 'vue';
+import type { ImageProps } from '@/types/component';
 
 interface Props extends ImageProps {}
 
 const props = withDefaults(defineProps<Props>(), {
   src: '',
   alt: '',
-  mode: 'aspectFit'
-})
+  mode: 'aspectFit',
+});
 
 const emit = defineEmits<{
-  load: []
-  error: []
-}>()
+  load: [];
+  error: [];
+}>();
 
 const imageStyle = computed(() => {
   return {
     display: 'block',
     width: '100%',
     height: 'auto',
-    ...props.style
-  }
-})
+    ...props.style,
+  };
+});
 
 const handleLoad = () => {
-  emit('load')
-}
+  emit('load');
+};
 
 const handleError = () => {
-  emit('error')
-}
+  emit('error');
+};
 </script>
 
 <style scoped>

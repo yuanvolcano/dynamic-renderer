@@ -5,16 +5,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { ContainerProps } from '@/types/component'
+import { computed } from 'vue';
+import type { ContainerProps } from '@/types/component';
 
 interface Props extends ContainerProps {}
 
 const props = withDefaults(defineProps<Props>(), {
   direction: 'column',
   justify: 'flex-start',
-  align: 'stretch'
-})
+  align: 'stretch',
+});
 
 const containerStyle = computed(() => {
   return {
@@ -22,9 +22,9 @@ const containerStyle = computed(() => {
     flexDirection: props.direction,
     justifyContent: props.justify,
     alignItems: props.align,
-    ...props.style
-  }
-})
+    ...props.style,
+  };
+});
 </script>
 
 <style scoped>

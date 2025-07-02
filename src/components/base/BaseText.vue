@@ -5,24 +5,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { TextProps } from '@/types/component'
+import { computed } from 'vue';
+import type { TextProps } from '@/types/component';
 
 interface Props extends TextProps {}
 
 const props = withDefaults(defineProps<Props>(), {
   content: '',
   fontSize: '28rpx',
-  color: '#333'
-})
+  color: '#333',
+});
 
 const textStyle = computed(() => {
   return {
     fontSize: props.fontSize,
     color: props.color,
-    ...props.style
-  }
-})
+    ...props.style,
+  };
+});
 </script>
 
 <style scoped>
