@@ -19,6 +19,20 @@
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
   },
+  "h5": {
+    "router": {
+      "mode": "history",
+      "base": "/"
+    },
+    "optimization": {
+      "treeShaking": {
+        "enable": true
+      }
+    },
+    "devServer": {
+      "https": false
+    }
+  },
   "tabBar": {
     "color": "#7A7E83",
     "selectedColor": "#3cc51f",

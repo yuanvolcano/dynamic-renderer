@@ -28,6 +28,14 @@ export default defineConfig(({ mode }) => {
       port: parseInt(env.VITE_DEV_PORT) || 3000,
       open: true,
       cors: true,
+      // 配置 History API fallback 支持 history 路由模式
+      historyApiFallback: {
+        index: '/index.html',
+        rewrites: [
+          { from: /^\/pages\/.*$/, to: '/index.html' },
+          { from: /^\/.*$/, to: '/index.html' },
+        ],
+      },
     },
     build: {
       target: 'es2015',
@@ -35,6 +43,10 @@ export default defineConfig(({ mode }) => {
       // 根据环境变量控制代码压缩
       minify: env.VITE_APP_ENV === 'production' ? 'esbuild' : false,
       sourcemap: env.VITE_APP_ENV !== 'production',
+      // 配置公共基础路径
+      assetsDir: 'static',
     },
+    // 配置基础路径，支持 history 模式
+    base: env.VITE_H5_PUBLIC_PATH || '/',
   };
 });

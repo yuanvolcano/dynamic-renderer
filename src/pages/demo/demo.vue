@@ -10,11 +10,7 @@
 
       <!-- 动态渲染的组件区域 -->
       <view class="component-container">
-        <DynamicRenderer
-          v-for="component in demoComponents"
-          :key="component.id"
-          :config="component"
-        />
+        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
       </view>
     </view>
 
@@ -26,12 +22,20 @@
         加载预设
       </button>
     </view>
+
+    <!-- 路由演示组件 -->
+    <RouterDemo />
+
+    <!-- 环境信息组件 -->
+    <EnvInfo />
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import DynamicRenderer from '@/components/DynamicRenderer.vue'
+import RouterDemo from '@/components/RouterDemo.vue'
+import EnvInfo from '@/components/EnvInfo.vue'
 
 interface ComponentConfig {
   id: string
