@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>路由模式测试</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .test-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .success {
+        color: #28a745;
+      }
+      .error {
+        color: #dc3545;
+      }
+      .info {
+        color: #007bff;
+      }
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+      .url-display {
+        background: #e9ecef;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: monospace;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧭 路由模式测试页面</h1>
+
+    <div class="test-section">
+      <h2>当前URL信息</h2>
+      <div class="url-display" id="currentUrl"></div>
+      <div>
+        <strong>路由模式判断:</strong>
+        <span id="routeMode" class="info"></span>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>测试链接</h2>
+      <p>请点击以下链接测试路由是否工作正常：</p>
+      <button onclick="testRoute('/')">首页 (/)</button>
+      <button onclick="testRoute('/pages/demo/demo')">演示页 (/pages/demo/demo)</button>
+      <button onclick="testRoute('/pages/index/index')">Index页 (/pages/index/index)</button>
+      <button onclick="testRoute('/test/path')">测试路径 (/test/path)</button>
+    </div>
+
+    <div class="test-section">
+      <h2>History API 测试</h2>
+      <button onclick="testPushState()">测试 pushState</button>
+      <button onclick="testReplaceState()">测试 replaceState</button>
+      <button onclick="testBack()">测试后退</button>
+    </div>
+
+    <div class="test-section">
+      <h2>测试结果</h2>
+      <div id="testResults"></div>
+    </div>
+
+    <script>
+      function updateCurrentUrl() {
+        const url = window.location.href;
+        document.getElementById('currentUrl').textContent = url;
+
+        // 判断路由模式
+        const hasHash = url.includes('#');
+        const mode = hasHash ? 'Hash 模式 ❌' : 'History 模式 ✅';
+        const modeElement = document.getElementById('routeMode');
+        modeElement.textContent = mode;
+        modeElement.className = hasHash ? 'error' : 'success';
+      }
+
+      function addTestResult(message, type = 'info') {
+        const results = document.getElementById('testResults');
+        const div = document.createElement('div');
+        div.className = type;
+        div.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+        results.appendChild(div);
+      }
+
+      function testRoute(path) {
+        const fullUrl = window.location.origin + path;
+        addTestResult(`测试访问: ${fullUrl}`);
+
+        // 使用 window.open 在新标签页中打开
+        window.open(fullUrl, '_blank');
+      }
+
+      function testPushState() {
+        const newPath = '/test/pushstate/' + Date.now();
+        history.pushState({ test: 'pushState' }, '', newPath);
+        updateCurrentUrl();
+        addTestResult(`pushState 测试: ${newPath}`, 'success');
+      }
+
+      function testReplaceState() {
+        const newPath = '/test/replacestate/' + Date.now();
+        history.replaceState({ test: 'replaceState' }, '', newPath);
+        updateCurrentUrl();
+        addTestResult(`replaceState 测试: ${newPath}`, 'success');
+      }
+
+      function testBack() {
+        history.back();
+        setTimeout(updateCurrentUrl, 100);
+        addTestResult('后退测试执行', 'info');
+      }
+
+      // 监听 popstate 事件
+      window.addEventListener('popstate', function (event) {
+        updateCurrentUrl();
+        addTestResult('检测到 popstate 事件', 'success');
+      });
+
+      // 页面加载时更新信息
+      document.addEventListener('DOMContentLoaded', function () {
+        updateCurrentUrl();
+        addTestResult('页面加载完成', 'success');
+      });
+
+      // 定期更新URL显示
+      setInterval(updateCurrentUrl, 1000);
+    </script>
+  </body>
+</html>

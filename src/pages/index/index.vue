@@ -16,16 +16,10 @@
     </view>
 
     <view class="actions">
-            <button
-        class="action-btn primary"
-        @click="navigateToDemo"
-      >
+      <button class="action-btn primary" @click="navigateToDemo">
         查看组件演示
       </button>
-      <button
-        class="action-btn default"
-        @click="loadDynamicUI"
-      >
+      <button class="action-btn default" @click="loadDynamicUI">
         加载动态UI
       </button>
     </view>

@@ -64,12 +64,25 @@
     "title": "跨平台动态UI",
     "template": "index.html",
     "router": {
-      "mode": "hash",
-      "base": "./"
+      "mode": "history",
+      "base": "/"
     },
     "devServer": {
       "https": false,
       "port": 3000
+    },
+    "optimization": {
+      "treeShaking": {
+        "enable": true
+      }
+    },
+    "publicPath": "/",
+    "sdkConfigs": {},
+    "async": {
+      "loading": "AsyncLoading",
+      "error": "AsyncError",
+      "delay": 200,
+      "timeout": 60000
     }
   }
 }

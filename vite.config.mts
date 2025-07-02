@@ -22,6 +22,8 @@ export default defineConfig(({ mode }) => {
       // 注入环境变量到客户端代码中
       __APP_ENV__: JSON.stringify(env.VITE_APP_ENV),
       __APP_VERSION__: JSON.stringify(env.VITE_APP_VERSION),
+      // 强制使用 history 路由模式
+      'process.env.UNI_ROUTER_MODE': '"history"',
     },
     server: {
       host: '0.0.0.0',
