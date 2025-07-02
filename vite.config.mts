@@ -39,6 +39,9 @@ export default defineConfig(({ mode }) => {
         ],
       },
     },
+    css: {
+      postcss: './postcss.config.js',
+    },
     build: {
       target: 'es2015',
       cssTarget: 'chrome61',

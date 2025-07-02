@@ -17,28 +17,29 @@ onHide(() => {
 <style>
 /* 注意：App.vue 中的样式为全局样式，作用于每一个页面 */
 page {
-  background-color: #f8f8f8;
+  @apply bg-gray-50 font-sans;
 }
 
-/* 全局字体设置 */
+/* uniapp 全局字体设置（Tailwind 在小程序中的备用方案） */
 .uni-app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* 通用样式 */
-.container {
-  padding: 20rpx;
+/* 自定义全局工具类 */
+.container-page {
+  @apply p-5;
 }
 
+/* 兼容原有样式的过渡类 */
 .text-center {
-  text-align: center;
+  @apply text-center;
 }
 
 .text-primary {
-  color: #3cc51f;
+  @apply text-success;
 }
 
 .text-secondary {
-  color: #999;
+  @apply text-gray-500;
 }
 </style>

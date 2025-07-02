@@ -23,6 +23,9 @@
       </button>
     </view>
 
+    <!-- Tailwind CSS 演示组件 -->
+    <TailwindDemo />
+
     <!-- 路由演示组件 -->
     <RouterDemo />
 
@@ -34,6 +37,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
 import DynamicRenderer from '@/components/DynamicRenderer.vue'
+import TailwindDemo from '@/components/TailwindDemo.vue'
 import RouterDemo from '@/components/RouterDemo.vue'
 import EnvInfo from '@/components/EnvInfo.vue'
 
