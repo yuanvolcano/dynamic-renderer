@@ -14,13 +14,22 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { InputProps } from '@/types/component';
 
-interface Props extends InputProps {
+import { IBaseComponentProps } from '@/types/component';
+
+// 输入框组件属性
+export interface IInputProps extends IBaseComponentProps {
+  value?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  type?: 'text' | 'number' | 'password';
+}
+
+interface IProps extends IInputProps {
   modelValue?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
   modelValue: '',
   placeholder: '请输入',
   disabled: false,

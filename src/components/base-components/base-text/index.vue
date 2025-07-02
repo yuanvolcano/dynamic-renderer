@@ -6,11 +6,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { TextProps } from '@/types/component';
+import { IBaseComponentProps } from '@/types/component';
 
-interface Props extends TextProps {}
+// 文本组件属性
+export interface IProps extends IBaseComponentProps {
+  content: string;
+  fontSize?: string;
+  color?: string;
+}
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
   content: '',
   fontSize: '28rpx',
   color: '#333',

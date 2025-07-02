@@ -11,11 +11,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ImageProps } from '@/types/component';
+import { IBaseComponentProps } from '@/types/component';
 
-interface Props extends ImageProps {}
+// 图片组件属性
+export interface IProps extends IBaseComponentProps {
+  src: string;
+  alt?: string;
+  mode?: string;
+}
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IProps>(), {
   src: '',
   alt: '',
   mode: 'aspectFit',

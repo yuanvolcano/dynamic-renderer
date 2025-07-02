@@ -10,11 +10,8 @@
 
       <!-- 动态渲染的组件区域 -->
       <view class="component-container">
-        <DynamicRenderer
-          v-for="component in demoComponents"
-          :key="component.id"
-          :config="component"
-        />
+        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component"
+          :getComponentMap="getComponentMap" />
       </view>
     </view>
 
@@ -27,19 +24,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import DynamicRenderer from '@/components/DynamicRenderer.vue';
+import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
+import { IComponentConfig } from '@/types/component';
+import { BaseContainer, BaseText, BaseButton, BaseInput, BaseImage } from '@/components/base-components';
 
-interface ComponentConfig {
-  id: string;
-  type: string;
-  props: Record<string, any>;
-  children?: ComponentConfig[];
-}
+// 组件映射函数
+const getComponentMap = (componentName: string) => {
+  const componentMap: Record<string, any> = {
+    BaseContainer: BaseContainer,
+    BaseText: BaseText,
+    BaseButton: BaseButton,
+    BaseInput: BaseInput,
+    BaseImage: BaseImage,
+  };
+  return componentMap[componentName] || BaseContainer;
+};
 
-const demoComponents = ref<ComponentConfig[]>([
+const demoComponents = ref<IComponentConfig[]>([
   {
     id: 'demo-1',
-    type: 'container',
+    componentName: 'BaseContainer',
     props: {
       style: {
         padding: '20rpx',
@@ -51,7 +55,7 @@ const demoComponents = ref<ComponentConfig[]>([
     children: [
       {
         id: 'demo-1-text',
-        type: 'text',
+        componentName: 'BaseText',
         props: {
           content: '这是一个动态渲染的文本组件',
           style: {
@@ -64,7 +68,7 @@ const demoComponents = ref<ComponentConfig[]>([
   },
   {
     id: 'demo-2',
-    type: 'button',
+    componentName: 'BaseButton',
     props: {
       text: '动态按钮',
       onClick: () => {
@@ -81,9 +85,9 @@ const demoComponents = ref<ComponentConfig[]>([
 ]);
 
 const addComponent = () => {
-  const newComponent: ComponentConfig = {
+  const newComponent: IComponentConfig = {
     id: `demo-${Date.now()}`,
-    type: 'text',
+    componentName: 'BaseText',
     props: {
       content: `新组件 ${new Date().toLocaleTimeString()}`,
       style: {
@@ -98,9 +102,9 @@ const addComponent = () => {
 
 const loadPreset = () => {
   // 加载预设的复杂UI结构
-  const preset: ComponentConfig = {
+  const preset: IComponentConfig = {
     id: 'preset-form',
-    type: 'container',
+    componentName: 'BaseContainer',
     props: {
       style: {
         padding: '30rpx',
@@ -112,7 +116,7 @@ const loadPreset = () => {
     children: [
       {
         id: 'form-title',
-        type: 'text',
+        componentName: 'BaseText',
         props: {
           content: '动态表单示例',
           style: {
@@ -124,7 +128,7 @@ const loadPreset = () => {
       },
       {
         id: 'form-input',
-        type: 'input',
+        componentName: 'BaseInput',
         props: {
           placeholder: '请输入内容',
           style: {
@@ -134,7 +138,7 @@ const loadPreset = () => {
       },
       {
         id: 'form-button',
-        type: 'button',
+        componentName: 'BaseButton',
         props: {
           text: '提交',
           onClick: () => {

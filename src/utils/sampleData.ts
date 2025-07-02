@@ -1,4 +1,4 @@
-import type { DynamicUISchema, ComponentConfig } from '@/types/component';
+import type { DynamicUISchema, IComponentConfig } from '@/types/component';
 
 /**
  * 简单文本展示示例
@@ -14,7 +14,7 @@ export const simpleTextExample: DynamicUISchema = {
   components: [
     {
       id: 'welcome-container',
-      type: 'container',
+      componentName: 'BaseContainer',
       props: {
         style: {
           padding: '30rpx',
@@ -26,7 +26,7 @@ export const simpleTextExample: DynamicUISchema = {
       children: [
         {
           id: 'welcome-title',
-          type: 'text',
+          componentName: 'BaseText',
           props: {
             content: '欢迎使用动态UI',
             style: {
@@ -40,7 +40,7 @@ export const simpleTextExample: DynamicUISchema = {
         },
         {
           id: 'welcome-desc',
-          type: 'text',
+          componentName: 'BaseText',
           props: {
             content: '这是一个由JSON配置生成的界面',
             style: {
@@ -69,7 +69,7 @@ export const formExample: DynamicUISchema = {
   components: [
     {
       id: 'form-container',
-      type: 'container',
+      componentName: 'BaseContainer',
       props: {
         style: {
           padding: '40rpx',
@@ -81,7 +81,7 @@ export const formExample: DynamicUISchema = {
       children: [
         {
           id: 'form-title',
-          type: 'text',
+          componentName: 'BaseText',
           props: {
             content: '用户信息填写',
             style: {
@@ -94,7 +94,7 @@ export const formExample: DynamicUISchema = {
         },
         {
           id: 'name-input',
-          type: 'input',
+          componentName: 'BaseInput',
           props: {
             placeholder: '请输入姓名',
             style: {
@@ -104,10 +104,10 @@ export const formExample: DynamicUISchema = {
         },
         {
           id: 'email-input',
-          type: 'input',
+          componentName: 'BaseInput',
           props: {
             placeholder: '请输入邮箱',
-            type: 'text',
+            componentName: 'BaseText',
             style: {
               marginBottom: '20rpx',
             },
@@ -115,7 +115,7 @@ export const formExample: DynamicUISchema = {
         },
         {
           id: 'age-input',
-          type: 'input',
+          componentName: 'BaseInput',
           props: {
             placeholder: '请输入年龄',
             type: 'number',
@@ -126,7 +126,7 @@ export const formExample: DynamicUISchema = {
         },
         {
           id: 'submit-btn',
-          type: 'button',
+          componentName: 'BaseButton',
           props: {
             text: '提交信息',
             onClick: () => {
@@ -156,7 +156,7 @@ export const complexLayoutExample: DynamicUISchema = {
   components: [
     {
       id: 'main-container',
-      type: 'container',
+      componentName: 'BaseContainer',
       props: {
         direction: 'column',
         style: {
@@ -166,7 +166,7 @@ export const complexLayoutExample: DynamicUISchema = {
       children: [
         {
           id: 'header-section',
-          type: 'container',
+          componentName: 'BaseContainer',
           props: {
             style: {
               backgroundColor: '#007aff',
@@ -178,7 +178,7 @@ export const complexLayoutExample: DynamicUISchema = {
           children: [
             {
               id: 'header-title',
-              type: 'text',
+              componentName: 'BaseText',
               props: {
                 content: '产品展示',
                 style: {
@@ -193,7 +193,7 @@ export const complexLayoutExample: DynamicUISchema = {
         },
         {
           id: 'content-section',
-          type: 'container',
+          componentName: 'BaseContainer',
           props: {
             direction: 'row',
             style: {
@@ -206,7 +206,7 @@ export const complexLayoutExample: DynamicUISchema = {
           children: [
             {
               id: 'product-image',
-              type: 'image',
+              componentName: 'BaseImage',
               props: {
                 src: 'https://via.placeholder.com/200x200/007aff/ffffff?text=Product',
                 mode: 'aspectFit',
@@ -220,7 +220,7 @@ export const complexLayoutExample: DynamicUISchema = {
             },
             {
               id: 'product-info',
-              type: 'container',
+              componentName: 'BaseContainer',
               props: {
                 direction: 'column',
                 style: {
@@ -230,7 +230,7 @@ export const complexLayoutExample: DynamicUISchema = {
               children: [
                 {
                   id: 'product-name',
-                  type: 'text',
+                  componentName: 'BaseText',
                   props: {
                     content: '智能手机',
                     style: {
@@ -243,7 +243,7 @@ export const complexLayoutExample: DynamicUISchema = {
                 },
                 {
                   id: 'product-price',
-                  type: 'text',
+                  componentName: 'BaseText',
                   props: {
                     content: '￥2999',
                     style: {
@@ -255,7 +255,7 @@ export const complexLayoutExample: DynamicUISchema = {
                 },
                 {
                   id: 'product-desc',
-                  type: 'text',
+                  componentName: 'BaseText',
                   props: {
                     content: '高性能处理器，超长续航，拍照清晰',
                     style: {
@@ -271,7 +271,7 @@ export const complexLayoutExample: DynamicUISchema = {
         },
         {
           id: 'action-section',
-          type: 'container',
+          componentName: 'BaseContainer',
           props: {
             direction: 'row',
             justify: 'space-between',
@@ -284,7 +284,7 @@ export const complexLayoutExample: DynamicUISchema = {
           children: [
             {
               id: 'add-cart-btn',
-              type: 'button',
+              componentName: 'BaseButton',
               props: {
                 text: '加入购物车',
                 onClick: () => {
@@ -303,7 +303,7 @@ export const complexLayoutExample: DynamicUISchema = {
             },
             {
               id: 'buy-now-btn',
-              type: 'button',
+              componentName: 'BaseButton',
               props: {
                 text: '立即购买',
                 onClick: () => {
@@ -344,15 +344,15 @@ export const generateId = (): string => {
 /**
  * 创建基础组件配置
  */
-export const createBasicComponent = (type: string, content?: string): ComponentConfig => {
-  const baseConfig: ComponentConfig = {
+export const createBasicComponent = (componentName: string, content?: string): IComponentConfig => {
+  const baseConfig: IComponentConfig = {
     id: generateId(),
-    type,
+    componentName,
     props: {},
   };
 
-  switch (type) {
-    case 'text':
+  switch (componentName) {
+    case 'BaseText':
       baseConfig.props = {
         content: content || '新建文本',
         style: {
@@ -361,7 +361,7 @@ export const createBasicComponent = (type: string, content?: string): ComponentC
         },
       };
       break;
-    case 'button':
+    case 'BaseButton':
       baseConfig.props = {
         text: content || '新建按钮',
         onClick: () => {
@@ -372,12 +372,12 @@ export const createBasicComponent = (type: string, content?: string): ComponentC
         },
       };
       break;
-    case 'input':
+    case 'BaseInput':
       baseConfig.props = {
         placeholder: content || '请输入内容',
       };
       break;
-    case 'container':
+    case 'BaseContainer':
       baseConfig.props = {
         style: {
           padding: '20rpx',
@@ -387,7 +387,7 @@ export const createBasicComponent = (type: string, content?: string): ComponentC
       };
       baseConfig.children = [];
       break;
-    case 'image':
+    case 'BaseImage':
       baseConfig.props = {
         src: 'https://via.placeholder.com/200x200/007aff/ffffff?text=Image',
         mode: 'aspectFit',

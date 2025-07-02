@@ -1,68 +1,23 @@
 // 组件配置接口
-export interface ComponentConfig {
+export interface IComponentConfig {
   id: string;
-  type: string;
+  componentName: string;
   props?: Record<string, any>;
-  children?: ComponentConfig[];
+  style?: Record<string, any>;
+  class?: string;
+  children?: IComponentConfig[];
 }
 
 // 基础组件属性接口
-export interface BaseComponentProps {
+export interface IBaseComponentProps {
   style?: Record<string, any>;
   onClick?: () => void;
 }
 
-// 文本组件属性
-export interface TextProps extends BaseComponentProps {
-  content: string;
-  fontSize?: string;
-  color?: string;
-}
-
-// 按钮组件属性
-export interface ButtonProps extends BaseComponentProps {
-  text: string;
-  disabled?: boolean;
-  loading?: boolean;
-}
-
-// 输入框组件属性
-export interface InputProps extends BaseComponentProps {
-  value?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  type?: 'text' | 'number' | 'password';
-}
-
-// 图片组件属性
-export interface ImageProps extends BaseComponentProps {
-  src: string;
-  alt?: string;
-  mode?: string;
-}
-
-// 容器组件属性
-export interface ContainerProps extends BaseComponentProps {
-  direction?: 'row' | 'column';
-  justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around';
-  align?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
-}
-
-// 组件类型枚举
-/* eslint-disable no-unused-vars */
-export enum ComponentType {
-  CONTAINER = 'container',
-  TEXT = 'text',
-  BUTTON = 'button',
-  INPUT = 'input',
-  IMAGE = 'image',
-}
-/* eslint-enable no-unused-vars */
-
 // 动态UI数据结构
 export interface DynamicUISchema {
   version: string;
-  components: ComponentConfig[];
+  components: IComponentConfig[];
   metadata?: {
     title?: string;
     description?: string;

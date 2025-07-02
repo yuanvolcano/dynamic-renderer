@@ -1,11 +1,11 @@
-import type { ComponentConfig, DynamicUISchema } from '@/types/component';
+import type { IComponentConfig, DynamicUISchema } from '@/types/component';
 
 /**
  * 动态UI渲染器核心类
  * 负责解析和管理动态UI配置
  */
 export class UIRenderer {
-  private components: Map<string, ComponentConfig> = new Map();
+  private components: Map<string, IComponentConfig> = new Map();
   private schema: DynamicUISchema | null = null;
 
   /**
@@ -24,7 +24,7 @@ export class UIRenderer {
    * 预处理组件，建立ID映射关系
    * @param components 组件配置数组
    */
-  private preprocessComponents(components: ComponentConfig[]): void {
+  private preprocessComponents(components: IComponentConfig[]): void {
     components.forEach(component => {
       this.components.set(component.id, component);
 
@@ -40,7 +40,7 @@ export class UIRenderer {
    * @param id 组件ID
    * @returns 组件配置或undefined
    */
-  getComponent(id: string): ComponentConfig | undefined {
+  getComponent(id: string): IComponentConfig | undefined {
     return this.components.get(id);
   }
 
@@ -48,7 +48,7 @@ export class UIRenderer {
    * 获取根组件列表
    * @returns 根组件配置数组
    */
-  getRootComponents(): ComponentConfig[] {
+  getRootComponents(): IComponentConfig[] {
     return this.schema?.components || [];
   }
 
@@ -57,9 +57,9 @@ export class UIRenderer {
    * @param config 组件配置
    * @returns 验证结果
    */
-  validateComponent(config: ComponentConfig): boolean {
+  validateComponent(config: IComponentConfig): boolean {
     // 基础验证
-    if (!config.id || !config.type) {
+    if (!config.id || !config.componentName) {
       return false;
     }
 
@@ -76,7 +76,7 @@ export class UIRenderer {
    * @param config 原始组件配置
    * @returns 克隆的组件配置
    */
-  cloneComponent(config: ComponentConfig): ComponentConfig {
+  cloneComponent(config: IComponentConfig): IComponentConfig {
     return JSON.parse(JSON.stringify(config));
   }
 
@@ -85,7 +85,7 @@ export class UIRenderer {
    * @param id 组件ID
    * @param updates 更新的属性
    */
-  updateComponent(id: string, updates: Partial<ComponentConfig>): void {
+  updateComponent(id: string, updates: Partial<IComponentConfig>): void {
     const component = this.components.get(id);
     if (component) {
       Object.assign(component, updates);
@@ -98,7 +98,7 @@ export class UIRenderer {
    * @param component 组件配置
    * @param parentId 父组件ID（可选）
    */
-  addComponent(component: ComponentConfig, parentId?: string): void {
+  addComponent(component: IComponentConfig, parentId?: string): void {
     if (!this.validateComponent(component)) {
       throw new Error('Invalid component configuration');
     }
@@ -146,7 +146,7 @@ export class UIRenderer {
    * @param components 组件数组
    * @param targetId 目标组件ID
    */
-  private removeFromParent(components: ComponentConfig[], targetId: string): boolean {
+  private removeFromParent(components: IComponentConfig[], targetId: string): boolean {
     for (let i = 0; i < components.length; i++) {
       if (components[i].id === targetId) {
         components.splice(i, 1);

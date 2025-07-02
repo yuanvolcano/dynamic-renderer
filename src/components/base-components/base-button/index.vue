@@ -7,11 +7,16 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { ButtonProps } from '@/types/component';
 
-interface Props extends ButtonProps {}
+import { IBaseComponentProps } from '@/types/component';
 
-const props = withDefaults(defineProps<Props>(), {
+export interface IProps extends IBaseComponentProps {
+  text: string;
+  disabled?: boolean;
+  loading?: boolean;
+}
+
+const props = withDefaults(defineProps<IProps>(), {
   text: '按钮',
   disabled: false,
   loading: false,
