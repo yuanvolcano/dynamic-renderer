@@ -1,0 +1,53 @@
+# 依赖
+node_modules/
+dist/
+unpackage/
+.output/
+
+# 日志
+*.log
+npm-debug.log*
+
+# 环境变量
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+
+# 临时文件
+*.tmp
+*.temp
+
+# 构建产物
+*.tgz
+*.tar.gz
+
+# uni-app 特定
+manifest.json
+pages.json
+
+# 图片和字体
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# 文档
+*.md
+
+# 配置文件
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

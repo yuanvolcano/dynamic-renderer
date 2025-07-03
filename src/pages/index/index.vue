@@ -57,7 +57,7 @@ const loadDynamicUI = () => {
     </view>
 
     <view class="features">
-      <view class="feature-item" v-for="feature in features" :key="feature.id">
+      <view v-for="feature in features" :key="feature.id" class="feature-item">
         <view class="feature-icon">{{ feature.icon }}</view>
         <view class="feature-content">
           <text class="feature-title">{{ feature.title }}</text>

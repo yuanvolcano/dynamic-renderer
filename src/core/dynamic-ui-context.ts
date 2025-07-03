@@ -1,10 +1,6 @@
 import { reactive, computed, watch } from 'vue';
-import type {
-  IDynamicUIContext,
-  IComponentState,
-  IEventBus,
-  IComponentConfig,
-} from '@/types/component';
+
+import type { IDynamicUIContext, IComponentState, IEventBus, IComponentConfig } from '@/types/component';
 
 class EventBus implements IEventBus {
   private events: Record<string, Function[]> = {};
@@ -112,11 +108,7 @@ export class DynamicUIContext implements IDynamicUIContext {
   handleEvent(eventType: string, handler: any, componentId: string): void {
     switch (handler.action) {
       case 'updateState':
-        this.updateState(
-          handler.payload.path,
-          handler.payload.value,
-          handler.target || componentId
-        );
+        this.updateState(handler.payload.path, handler.payload.value, handler.target || componentId);
         break;
 
       case 'emit':

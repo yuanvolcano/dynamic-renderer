@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, shallowRef, watch, inject } from 'vue';
-import { IComponentConfig, IModeCondition } from '@/types/component';
+import { computed, shallowRef, watch } from 'vue';
+
 import { BaseContainer } from '@/components/base-components';
-import { useDynamicUIContext, useComponentState } from '@/hooks/use-dynamic-ui';
+import { useDynamicUIContext } from '@/hooks/use-dynamic-ui';
 import useInstallCom from '@/hooks/use-install-com';
+import { IComponentConfig, IModeCondition } from '@/types/component';
 
 defineOptions({
   name: 'DynamicRenderer',
@@ -102,7 +103,7 @@ const handleEvent = (eventType: string, config: IComponentConfig) => {
   }
 
   const handlers = Array.isArray(config.events[eventType])
-    ? config.events[eventType] as any[]
+    ? (config.events[eventType] as any[])
     : [config.events[eventType]];
 
   handlers.forEach(handler => {
@@ -122,22 +123,26 @@ const handleClick = (config: IComponentConfig) => {
 };
 
 // 监听config变化，收集 componentName 和初始化状态
-watch(() => props.config, (newConfig) => {
-  const componentNames = collectComponentNames(newConfig);
-  console.log('收集到的组件名称:', componentNames);
+watch(
+  () => props.config,
+  newConfig => {
+    const componentNames = collectComponentNames(newConfig);
+    console.log('收集到的组件名称:', componentNames);
 
-  // 初始化配置（状态和事件）
-  dynamicContext.initializeConfig(newConfig);
+    // 初始化配置（状态和事件）
+    dynamicContext.initializeConfig(newConfig);
 
-  // 动态加载组件
-  if (componentNames.length > 0) {
-    const result = installCom(componentNames);
-    componentMap.value = result.dynamicComponents;
-    if (result.loadFailedList.length > 0) {
-      console.warn('加载失败的组件:', result.loadFailedList);
+    // 动态加载组件
+    if (componentNames.length > 0) {
+      const result = installCom(componentNames);
+      componentMap.value = result.dynamicComponents;
+      if (result.loadFailedList.length > 0) {
+        console.warn('加载失败的组件:', result.loadFailedList);
+      }
     }
-  }
-}, { immediate: true, deep: true });
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <template>
@@ -145,10 +150,17 @@ watch(() => props.config, (newConfig) => {
   <template v-if="Array.isArray(config)">
     <DynamicRenderer v-for="item in config" :key="item.id" :config="item" />
   </template>
-  <component v-else :is="getCurrentComponent(config.componentName)" v-bind="buildComponentProps(config)"
-    :style="mergedStyle" @click="() => handleClick(config)" @input="(e) => handleEvent('input', config)"
-    @change="(e) => handleEvent('change', config)" @focus="() => handleEvent('focus', config)"
-    @blur="() => handleEvent('blur', config)">
+  <component
+    v-else
+    :is="getCurrentComponent(config.componentName)"
+    v-bind="buildComponentProps(config)"
+    :style="mergedStyle"
+    @click="() => handleClick(config)"
+    @input="e => handleEvent('input', config)"
+    @change="e => handleEvent('change', config)"
+    @focus="() => handleEvent('focus', config)"
+    @blur="() => handleEvent('blur', config)"
+  >
     <template v-if="config.children">
       <DynamicRenderer v-for="child in config.children" :key="child.id" :config="child" />
     </template>

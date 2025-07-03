@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+
 import { IBaseComponentProps } from '@/types/component';
 
 // 文本组件属性

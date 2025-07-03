@@ -70,7 +70,7 @@ export interface IDynamicUIContext {
 
 // 事件总线接口
 export interface IEventBus {
-  emit(event: string, payload?: any): void;
-  on(event: string, handler: Function): void;
-  off(event: string, handler?: Function): void;
+  emit: (_event: string, _payload?: any) => void;
+  on: (_event: string, _handler: Function) => void;
+  off: (_event: string, _handler?: Function) => void;
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+
 import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
+import { provideDynamicUIContext, useEventBus, useGlobalState } from '@/hooks/use-dynamic-ui';
 import { IComponentConfig } from '@/types/component';
-import { BaseContainer, BaseText, BaseButton, BaseInput, BaseImage } from '@/components/base-components';
-import { provideDynamicUIContext, useGlobalState, useEventBus } from '@/hooks/use-dynamic-ui';
 
 // 提供动态UI上下文
 const context = provideDynamicUIContext({
@@ -20,7 +20,7 @@ const { state: globalState, updateState, getState } = useGlobalState();
 const eventBus = useEventBus();
 
 // 监听全局事件
-eventBus.on('formSubmit', (data) => {
+eventBus.on('formSubmit', data => {
   console.log('Form submitted:', data);
   uni.showToast({
     title: '表单提交成功！',
@@ -28,7 +28,7 @@ eventBus.on('formSubmit', (data) => {
   });
 });
 
-eventBus.on('counterChange', (value) => {
+eventBus.on('counterChange', value => {
   updateState('counter', value);
 });
 
@@ -86,6 +86,7 @@ const demoComponents = ref<IComponentConfig[]>([
               const currentValue = context.getStateValue('counter');
               context.updateState('counter', Math.max(0, currentValue - 1));
             },
+            type: 'click',
           },
         },
       },
@@ -170,6 +171,7 @@ const demoComponents = ref<IComponentConfig[]>([
                 event: 'formSubmit',
                 data: '{{$local}}',
               },
+              type: 'click',
             },
             {
               action: 'showToast',
@@ -177,6 +179,7 @@ const demoComponents = ref<IComponentConfig[]>([
                 title: '表单已提交',
                 icon: 'success',
               },
+              type: 'click',
             },
           ],
         },

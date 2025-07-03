@@ -1,5 +1,6 @@
-import { getCamelToDashName } from '@/utils/common';
 import { defineAsyncComponent } from 'vue';
+
+import { getCamelToDashName } from '@/utils/common';
 
 /* 加载基础组件 */
 function installBaseComponent(componentName: string) {
