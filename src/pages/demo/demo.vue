@@ -3,10 +3,38 @@ import { ref } from 'vue';
 import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 import { IComponentConfig } from '@/types/component';
 import { BaseContainer, BaseText, BaseButton, BaseInput, BaseImage } from '@/components/base-components';
+import { provideDynamicUIContext, useGlobalState, useEventBus } from '@/hooks/use-dynamic-ui';
+
+// 提供动态UI上下文
+const context = provideDynamicUIContext({
+  userInfo: {
+    name: '',
+    email: '',
+    age: 0,
+  },
+  formData: {},
+  counter: 0,
+});
+
+const { state: globalState, updateState, getState } = useGlobalState();
+const eventBus = useEventBus();
+
+// 监听全局事件
+eventBus.on('formSubmit', (data) => {
+  console.log('Form submitted:', data);
+  uni.showToast({
+    title: '表单提交成功！',
+    icon: 'success',
+  });
+});
+
+eventBus.on('counterChange', (value) => {
+  updateState('counter', value);
+});
 
 const demoComponents = ref<IComponentConfig[]>([
   {
-    id: 'demo-1',
+    id: 'state-demo',
     componentName: 'BaseContainer',
     props: {
       style: {
@@ -18,33 +46,142 @@ const demoComponents = ref<IComponentConfig[]>([
     },
     children: [
       {
-        id: 'demo-1-text',
+        id: 'counter-display',
         componentName: 'BaseText',
         props: {
-          content: '这是一个动态渲染的文本组件',
-          style: {
-            fontSize: '32rpx',
-            color: '#333',
+          content: '计数器',
+          style: { fontSize: '32rpx', marginBottom: '10rpx' },
+        },
+        bindings: {
+          content: '$global.counter', // 绑定到全局状态
+        },
+      },
+      {
+        id: 'increment-btn',
+        componentName: 'BaseButton',
+        props: {
+          text: '增加',
+          style: { marginRight: '10rpx' },
+        },
+        events: {
+          click: {
+            action: 'updateState',
+            payload: {
+              path: 'counter',
+              value: '{{$global.counter + 1}}', // 表达式
+            },
+          },
+        },
+      },
+      {
+        id: 'decrement-btn',
+        componentName: 'BaseButton',
+        props: {
+          text: '减少',
+        },
+        events: {
+          click: {
+            action: 'custom',
+            payload: (context, componentId) => {
+              const currentValue = context.getStateValue('counter');
+              context.updateState('counter', Math.max(0, currentValue - 1));
+            },
           },
         },
       },
     ],
   },
   {
-    id: 'demo-2',
-    componentName: 'BaseButton',
+    id: 'form-demo',
+    componentName: 'BaseContainer',
     props: {
-      text: '动态按钮',
-      onClick: () => {
-        uni.showToast({
-          title: '按钮被点击了！',
-          icon: 'success',
-        });
-      },
       style: {
-        marginBottom: '20rpx',
+        padding: '20rpx',
+        backgroundColor: '#f9f9f9',
+        borderRadius: '16rpx',
       },
     },
+    state: {
+      name: '',
+      email: '',
+    },
+    children: [
+      {
+        id: 'form-title',
+        componentName: 'BaseText',
+        props: {
+          content: '用户信息表单',
+          style: { fontSize: '36rpx', fontWeight: 'bold', marginBottom: '20rpx' },
+        },
+      },
+      {
+        id: 'name-input',
+        componentName: 'BaseInput',
+        props: {
+          placeholder: '请输入姓名',
+          style: { marginBottom: '15rpx' },
+        },
+        bindings: {
+          modelValue: '$local.name',
+        },
+        events: {
+          input: {
+            action: 'updateState',
+            payload: {
+              path: 'name',
+              value: '{{$event.target.value}}',
+            },
+            target: 'form-demo',
+          },
+        },
+      },
+      {
+        id: 'email-input',
+        componentName: 'BaseInput',
+        props: {
+          placeholder: '请输入邮箱',
+          style: { marginBottom: '20rpx' },
+        },
+        bindings: {
+          modelValue: '$local.email',
+        },
+        events: {
+          input: {
+            action: 'updateState',
+            payload: {
+              path: 'email',
+              value: '{{$event.target.value}}',
+            },
+            target: 'form-demo',
+          },
+        },
+      },
+      {
+        id: 'submit-btn',
+        componentName: 'BaseButton',
+        props: {
+          text: '提交表单',
+        },
+        events: {
+          click: [
+            {
+              action: 'emit',
+              payload: {
+                event: 'formSubmit',
+                data: '{{$local}}',
+              },
+            },
+            {
+              action: 'showToast',
+              payload: {
+                title: '表单已提交',
+                icon: 'success',
+              },
+            },
+          ],
+        },
+      },
+    ],
   },
 ]);
 
@@ -123,17 +260,18 @@ const loadPreset = () => {
 <template>
   <view class="container">
     <view class="header">
-      <text class="title">组件演示</text>
-      <text class="subtitle">展示跨平台动态UI组件</text>
+      <text class="title">状态管理和事件系统演示</text>
+      <text class="subtitle">展示动态UI的状态绑定和事件处理</text>
     </view>
 
     <view class="demo-section">
-      <text class="section-title">基础组件</text>
+      <!-- 显示全局状态 -->
+      <view class="state-display">
+        <text>全局计数器: {{ globalState.counter }}</text>
+      </view>
 
       <!-- 动态渲染的组件区域 -->
-      <view class="component-container">
-        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
-      </view>
+      <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
     </view>
 
     <view class="actions">
@@ -150,12 +288,12 @@ const loadPreset = () => {
 
 .header {
   text-align: center;
-  margin-bottom: 40rpx;
+  margin-bottom: 30rpx;
 }
 
 .title {
   display: block;
-  font-size: 48rpx;
+  font-size: 36rpx;
   font-weight: bold;
   color: #333;
   margin-bottom: 10rpx;
@@ -167,20 +305,15 @@ const loadPreset = () => {
   color: #666;
 }
 
+.state-display {
+  padding: 20rpx;
+  background-color: #e8f4fd;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+}
+
 .demo-section {
   margin-bottom: 60rpx;
-}
-
-.section-title {
-  display: block;
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 30rpx;
-}
-
-.component-container {
-  min-height: 200rpx;
 }
 
 .actions {
