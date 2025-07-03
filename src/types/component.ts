@@ -14,6 +14,8 @@ export interface IComponentConfig {
   state?: any;
   /** 事件处理器 */
   events?: Record<string, IEventHandler | IEventHandler[]>;
+  /** 预留其他属性，方便扩展 */
+  [key: string]: any;
 }
 
 // 基础组件属性接口

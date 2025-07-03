@@ -11,6 +11,12 @@
       "style": {
         "navigationBarTitleText": "组件演示"
       }
+    },
+    {
+      "path": "pages/layout/layout",
+      "style": {
+        "navigationBarTitleText": "布局展示"
+      }
     }
   ],
   "globalStyle": {

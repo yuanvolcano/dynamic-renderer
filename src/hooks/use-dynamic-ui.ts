@@ -1,8 +1,7 @@
-import { inject, provide, computed } from 'vue';
+import { computed, inject, provide } from 'vue';
 
+import { DYNAMIC_UI_CONTEXT_KEY } from '@/constants/constants';
 import { DynamicUIContext } from '@/core/dynamic-ui-context';
-
-const DYNAMIC_UI_CONTEXT_KEY = Symbol('dynamic-ui-context');
 
 // 提供上下文
 export function provideDynamicUIContext(initialState = {}) {

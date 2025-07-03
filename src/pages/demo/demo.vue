@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
-import { provideDynamicUIContext, useEventBus, useGlobalState } from '@/hooks/use-dynamic-ui';
+import { provideDynamicUIContext } from '@/hooks/use-dynamic-ui';
 import { EValueMode, IComponentConfig } from '@/types/component';
 
 // 提供动态UI上下文
-const context = provideDynamicUIContext({
+provideDynamicUIContext({
   userInfo: {
     name: '',
     email: '',
@@ -14,22 +13,6 @@ const context = provideDynamicUIContext({
   },
   formData: {},
   counter: 0,
-});
-
-const { state: globalState, updateState, getState } = useGlobalState();
-const eventBus = useEventBus();
-
-// 监听全局事件
-eventBus.on('formSubmit', data => {
-  console.log('Form submitted:', data);
-  uni.showToast({
-    title: '表单提交成功！',
-    icon: 'success',
-  });
-});
-
-eventBus.on('counterChange', value => {
-  updateState('counter', value);
 });
 
 const demoComponents = ref<IComponentConfig[]>([
@@ -258,28 +241,27 @@ const loadPreset = () => {
 
   demoComponents.value.push(preset);
 };
+
+const goToLayout = () => {
+  console.log('~~ goToLayout');
+  uni.navigateTo({
+    url: '/pages/layout/layout',
+  });
+};
 </script>
 
 <template>
   <view class="container">
-    <view class="header">
-      <text class="title">状态管理和事件系统演示</text>
-      <text class="subtitle">展示动态UI的状态绑定和事件处理</text>
-    </view>
-
-    <view class="demo-section">
-      <!-- 显示全局状态 -->
-      <view class="state-display">
-        <text>全局计数器: globalState.counter</text>
-      </view>
-
-      <!-- 动态渲染的组件区域 -->
-      <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
+    <!-- 测试 Tailwind CSS 的简单测试元素 -->
+    <view class="bg-blue-500 text-white p-4 mb-4 rounded-lg">
+      <text class="text-xl font-bold">Tailwind CSS 测试</text>
+      <text class="block text-sm mt-2">如果你看到蓝色背景和白色文字，说明 Tailwind CSS 已生效！</text>
     </view>
 
     <view class="actions">
       <button class="action-btn primary" @click="addComponent">添加组件</button>
       <button class="action-btn default" @click="loadPreset">加载预设</button>
+      <button class="action-btn layout" @click="goToLayout">布局展示</button>
     </view>
   </view>
 </template>
@@ -341,5 +323,10 @@ const loadPreset = () => {
   background-color: #f8f8f8;
   color: #333;
   border: 1rpx solid #e5e5e5;
+}
+
+.action-btn.layout {
+  background-color: #28a745;
+  color: #fff;
 }
 </style>

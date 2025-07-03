@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onLaunch, onShow, onHide } from '@dcloudio/uni-app';
+import { onHide, onLaunch, onShow } from '@dcloudio/uni-app';
 
 onLaunch(() => {
   console.log('App Launch');
@@ -23,23 +23,5 @@ page {
 /* uniapp 全局字体设置（Tailwind 在小程序中的备用方案） */
 .uni-app {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* 自定义全局工具类 */
-.container-page {
-  @apply p-5;
-}
-
-/* 兼容原有样式的过渡类 */
-.text-center {
-  @apply text-center;
-}
-
-.text-primary {
-  @apply text-success;
-}
-
-.text-secondary {
-  @apply text-gray-500;
 }
 </style>
