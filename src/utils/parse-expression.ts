@@ -1,4 +1,6 @@
-import { TExpression } from '@/types/component';
+import { isObjectType } from './common';
+
+import { EValueMode, IModeCondition, TExpression, TValueCondition } from '@/types/component';
 
 /**
  * @description — 组装最终的表达式
@@ -59,4 +61,35 @@ export function parseExpression(
   const fn = new Function('$', '$$', '$$$', `with ($) { return ${matches[1]}; }`);
   const newScope = new Proxy(scope, proxyHandler(expression));
   return fn(newScope, allModuleData, extraData);
+}
+
+export function isIModeCondition(target: any): target is IModeCondition {
+  return isObjectType(target) && 'condition' in target;
+}
+
+export function parseModeValue(
+  valueCondition: TValueCondition,
+  scope: Record<string, any>,
+  allModuleData?: Record<string, any>,
+  extraData?: Record<string, any>
+) {
+  if (!isIModeCondition(valueCondition)) {
+    return valueCondition;
+  }
+
+  const { mode, condition } = valueCondition;
+  try {
+    switch (mode) {
+      case EValueMode.READ: {
+        return condition;
+      }
+
+      default: {
+        const finalCondition = getFinalCondition(condition);
+        return parseExpression(finalCondition, scope, allModuleData, extraData);
+      }
+    }
+  } catch {
+    throw new Error(`解析表达式失败: ${condition}`);
+  }
 }

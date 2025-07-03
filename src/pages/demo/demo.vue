@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 import { provideDynamicUIContext, useEventBus, useGlobalState } from '@/hooks/use-dynamic-ui';
-import { IComponentConfig } from '@/types/component';
+import { EValueMode, IComponentConfig } from '@/types/component';
 
 // 提供动态UI上下文
 const context = provideDynamicUIContext({
@@ -53,7 +53,7 @@ const demoComponents = ref<IComponentConfig[]>([
           style: { fontSize: '32rpx', marginBottom: '10rpx' },
         },
         bindings: {
-          content: '$global.counter', // 绑定到全局状态
+          content: '$$.counter', // 绑定到全局状态
         },
       },
       {
@@ -68,7 +68,7 @@ const demoComponents = ref<IComponentConfig[]>([
             action: 'updateState',
             payload: {
               path: 'counter',
-              value: '{{$global.counter + 1}}', // 表达式
+              value: '$$.counter + 1', // 表达式
             },
           },
         },
@@ -82,9 +82,9 @@ const demoComponents = ref<IComponentConfig[]>([
         events: {
           click: {
             action: 'custom',
-            payload: (context, componentId) => {
-              const currentValue = context.getStateValue('counter');
-              context.updateState('counter', Math.max(0, currentValue - 1));
+            payload: {
+              mode: EValueMode.PARSE,
+              condition: '$$$.context.updateState("counter", Math.max(0, $$$.context.getStateValue("counter") - 1))',
             },
             type: 'click',
           },
@@ -123,14 +123,14 @@ const demoComponents = ref<IComponentConfig[]>([
           style: { marginBottom: '15rpx' },
         },
         bindings: {
-          modelValue: '$local.name',
+          modelValue: '$.name',
         },
         events: {
           input: {
             action: 'updateState',
             payload: {
               path: 'name',
-              value: '{{$event.target.value}}',
+              value: '$event.target.value',
             },
             target: 'form-demo',
           },
@@ -144,14 +144,14 @@ const demoComponents = ref<IComponentConfig[]>([
           style: { marginBottom: '20rpx' },
         },
         bindings: {
-          modelValue: '$local.email',
+          modelValue: '$.email',
         },
         events: {
           input: {
             action: 'updateState',
             payload: {
               path: 'email',
-              value: '{{$event.target.value}}',
+              value: '$event.target.value',
             },
             target: 'form-demo',
           },
@@ -169,7 +169,7 @@ const demoComponents = ref<IComponentConfig[]>([
               action: 'emit',
               payload: {
                 event: 'formSubmit',
-                data: '{{$local}}',
+                data: '$local',
               },
               type: 'click',
             },
@@ -270,7 +270,7 @@ const loadPreset = () => {
     <view class="demo-section">
       <!-- 显示全局状态 -->
       <view class="state-display">
-        <text>全局计数器: {{ globalState.counter }}</text>
+        <text>全局计数器: globalState.counter</text>
       </view>
 
       <!-- 动态渲染的组件区域 -->

@@ -97,7 +97,7 @@ const mergedStyle = computed(() => {
 });
 
 // 处理事件
-const handleEvent = (eventType: string, config: IComponentConfig) => {
+const handleEvent = (eventType: string, $event: any, config: IComponentConfig) => {
   if (!config.events || !config.events[eventType]) {
     return;
   }
@@ -112,14 +112,14 @@ const handleEvent = (eventType: string, config: IComponentConfig) => {
 };
 
 // 处理点击事件
-const handleClick = (config: IComponentConfig) => {
+const handleClick = (event: any, config: IComponentConfig) => {
   // 处理原有的onClick
   if (!Array.isArray(props.config) && config.props?.onClick) {
     config.props.onClick();
   }
 
   // 处理新的事件系统
-  handleEvent('click', config);
+  handleEvent('click', event, config);
 };
 
 // 监听config变化，收集 componentName 和初始化状态
@@ -155,11 +155,11 @@ watch(
     :is="getCurrentComponent(config.componentName)"
     v-bind="buildComponentProps(config)"
     :style="mergedStyle"
-    @click="() => handleClick(config)"
-    @input="e => handleEvent('input', config)"
-    @change="e => handleEvent('change', config)"
-    @focus="() => handleEvent('focus', config)"
-    @blur="() => handleEvent('blur', config)"
+    @click="($event: any) => handleClick($event, config)"
+    @update:modelValue="$event => handleEvent('update:modelValue', $event, config)"
+    @change="$event => handleEvent('change', $event, config)"
+    @focus="$event => handleEvent('focus', $event, config)"
+    @blur="$event => handleEvent('blur', $event, config)"
   >
     <template v-if="config.children">
       <DynamicRenderer v-for="child in config.children" :key="child.id" :config="child" />

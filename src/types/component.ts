@@ -35,18 +35,19 @@ export interface DynamicUISchema {
   };
 }
 
-export type TExpression = boolean | number | string | undefined;
-
 export enum EValueMode {
   READ = 'read',
-  PATH = 'path',
   PARSE = 'parse',
 }
+
+export type TExpression = boolean | number | string | undefined;
 
 export interface IModeCondition {
   mode: EValueMode;
   condition: TExpression;
 }
+
+export type TValueCondition = boolean | number | string | undefined | IModeCondition;
 
 // 状态管理相关类型
 export interface IComponentState {

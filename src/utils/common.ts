@@ -5,3 +5,11 @@ export function getCamelToDashName(camelName: string) {
 
   return dashName;
 }
+
+export function getType<T>(target: T) {
+  return Object.prototype.toString.call(target).slice(8, -1);
+}
+
+export function isObjectType(target: any): target is object {
+  return getType(target) === 'Object';
+}

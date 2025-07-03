@@ -1,6 +1,8 @@
-import { reactive, computed, watch } from 'vue';
+import { reactive } from 'vue';
 
-import type { IDynamicUIContext, IComponentState, IEventBus, IComponentConfig } from '@/types/component';
+import type { IComponentConfig, IComponentState, IDynamicUIContext, IEventBus } from '@/types/component';
+
+import { isIModeCondition, parseModeValue } from '@/utils/parse-expression';
 
 class EventBus implements IEventBus {
   private events: Record<string, Function[]> = {};
@@ -107,7 +109,7 @@ export class DynamicUIContext implements IDynamicUIContext {
   // 处理事件
   handleEvent(eventType: string, handler: any, componentId: string): void {
     switch (handler.action) {
-      case 'updateState':
+      case 'update:modelValue':
         this.updateState(handler.payload.path, handler.payload.value, handler.target || componentId);
         break;
 
@@ -125,8 +127,8 @@ export class DynamicUIContext implements IDynamicUIContext {
 
       case 'custom':
         // 执行自定义函数
-        if (typeof handler.payload === 'function') {
-          handler.payload(this, componentId);
+        if (isIModeCondition(handler.payload)) {
+          parseModeValue(handler.payload, this.componentStates, this.globalState, { context: this });
         }
         break;
 
