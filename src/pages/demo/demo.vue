@@ -4,18 +4,6 @@ import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 import { IComponentConfig } from '@/types/component';
 import { BaseContainer, BaseText, BaseButton, BaseInput, BaseImage } from '@/components/base-components';
 
-// 组件映射函数
-const getComponentMap = (componentName: string) => {
-  const componentMap: Record<string, any> = {
-    BaseContainer: BaseContainer,
-    BaseText: BaseText,
-    BaseButton: BaseButton,
-    BaseInput: BaseInput,
-    BaseImage: BaseImage,
-  };
-  return componentMap[componentName] || BaseContainer;
-};
-
 const demoComponents = ref<IComponentConfig[]>([
   {
     id: 'demo-1',
@@ -144,8 +132,7 @@ const loadPreset = () => {
 
       <!-- 动态渲染的组件区域 -->
       <view class="component-container">
-        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component"
-          :getComponentMap="getComponentMap" />
+        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component" />
       </view>
     </view>
 
