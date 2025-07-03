@@ -38,19 +38,6 @@ export const layoutConfig: IComponentConfig[] = [
               class: 'text-2xl font-bold',
             },
           },
-          {
-            id: 'user_info',
-            componentName: 'BaseText',
-            props: {
-              class: 'text-lg',
-            },
-            bindings: {
-              content: {
-                mode: EValueMode.READ,
-                condition: '$$.user.name',
-              },
-            },
-          },
         ],
       },
       // 主体区域（包含侧边栏和内容）
@@ -169,22 +156,9 @@ export const layoutConfig: IComponentConfig[] = [
             id: 'content',
             componentName: 'BaseContainer',
             props: {
-              class: 'flex-1 bg-gray-600 text-white p-8 overflow-auto',
+              class: 'flex-1 bg-gray-200 text-white p-8 overflow-auto',
             },
             children: [
-              {
-                id: 'content_title',
-                componentName: 'BaseText',
-                props: {
-                  class: 'text-4xl font-bold mb-6',
-                },
-                bindings: {
-                  content: {
-                    mode: EValueMode.READ,
-                    condition: '$$.content.title',
-                  },
-                },
-              },
               {
                 id: 'feature_list',
                 componentName: 'BaseContainer',
@@ -251,7 +225,7 @@ export const layoutConfig: IComponentConfig[] = [
                 },
                 bindings: {
                   content: {
-                    mode: EValueMode.READ,
+                    mode: EValueMode.PARSE,
                     condition: '$.input_1',
                   },
                 },

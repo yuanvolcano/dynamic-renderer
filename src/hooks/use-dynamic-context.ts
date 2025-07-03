@@ -53,7 +53,7 @@ export function useEventBus(): IEventBus {
 /**
  * 动态UI上下文 hook
  */
-export function useDynamicUIContext() {
+export function useDynamicContext() {
   // 响应式状态
   const jsonSchema = ref<IComponentConfig[] | IComponentConfig>([]);
   const globalState = reactive({});
@@ -61,9 +61,9 @@ export function useDynamicUIContext() {
   const eventBus = useEventBus();
 
   // 设置组件状态
-  const setComponentState = (componentId: string, state: IComponentState): void => {
+  const setComponentState = (componentId: string, state: any): void => {
     console.log('~~ setComponentState', componentId, state);
-    componentStates[componentId] = reactive({ ...state });
+    componentStates[componentId] = state;
   };
 
   // 获取组件状态
@@ -74,14 +74,14 @@ export function useDynamicUIContext() {
   // 更新状态
   const updateState = (path: string, value: any, componentId?: string): void => {
     console.log('~~ updateState', path, value, componentId);
-    const targetState = componentId ? getComponentState(componentId) : globalState;
+    const targetState = componentId ? componentStates : globalState;
 
     if (path.includes('.')) {
       const keys = path.split('.');
-      let current = targetState;
+      let current: any = targetState;
 
       for (let i = 0; i < keys.length - 1; i++) {
-        if (!current[keys[i]]) {
+        if (!current?.[keys[i]]) {
           current[keys[i]] = {};
         }
         current = current[keys[i]];
@@ -89,7 +89,7 @@ export function useDynamicUIContext() {
 
       current[keys[keys.length - 1]] = value;
     } else {
-      targetState[path] = value;
+      (targetState as any)[path] = value;
     }
   };
 
@@ -99,7 +99,7 @@ export function useDynamicUIContext() {
 
     if (path.includes('.')) {
       const keys = path.split('.');
-      let current = targetState;
+      let current: any = targetState;
 
       for (const key of keys) {
         if (current && typeof current === 'object' && key in current) {
@@ -112,7 +112,7 @@ export function useDynamicUIContext() {
       return current;
     }
 
-    return targetState[path];
+    return (targetState as any)[path];
   };
 
   // 处理事件
