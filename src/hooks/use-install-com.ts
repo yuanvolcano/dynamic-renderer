@@ -82,6 +82,7 @@ export default function useInstallCom() {
       }
       // 这里可以继续拓展 else-if，比如从三方 UI 库，或者自定义组件
       else {
+        // 业务组件
         const installResult = installBusinessComponent(componentName);
         if (!installResult) {
           return;

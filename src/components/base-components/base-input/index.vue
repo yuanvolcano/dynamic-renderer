@@ -26,11 +26,13 @@ const props = withDefaults(defineProps<IProps>(), {
   type: 'text',
 });
 
-const emit = defineEmits<{
+const emits = defineEmits<{
   'update:modelValue': [value: string];
-  focus: [];
-  blur: [];
+  focus: [value: string];
+  blur: [value: string];
 }>();
+
+const innerValue = defineModel<string>('modelValue');
 
 const inputType = computed(() => {
   // uniapp 中的 input type 映射
@@ -42,41 +44,29 @@ const inputType = computed(() => {
   return typeMap[props.type] || 'text';
 });
 
-const inputStyle = computed(() => {
-  return {
-    padding: '20rpx',
-    borderRadius: '8rpx',
-    border: '2rpx solid #e5e5e5',
-    fontSize: '28rpx',
-    backgroundColor: props.disabled ? '#f5f5f5' : '#fff',
-    color: props.disabled ? '#999' : '#333',
-    ...props.style,
-  };
-});
-
-const handleInput = (event: any) => {
-  const value = event.target.value || event.detail.value;
-  emit('update:modelValue', value);
+const handleValueUpdate = (event: any) => {
+  console.log('handleValueUpdate', event, innerValue.value);
+  emits('update:modelValue', event.target.value || event.detail.value);
 };
 
 const handleFocus = () => {
-  emit('focus');
+  emits('focus', innerValue.value || '');
 };
 
 const handleBlur = () => {
-  emit('blur');
+  emits('blur', innerValue.value || '');
 };
 </script>
 
 <template>
   <input
+    v-model="innerValue"
     class="base-input"
-    :style="inputStyle"
-    :value="modelValue"
+    :class="{ disabled: disabled }"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="inputType"
-    @input="handleInput"
+    @input="handleValueUpdate"
     @focus="handleFocus"
     @blur="handleBlur"
   />
@@ -85,9 +75,19 @@ const handleBlur = () => {
 <style lang="scss" scoped>
 .base-input {
   display: block;
-  width: 100%;
   box-sizing: border-box;
   outline: none;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #e5e5e5;
+  font-size: 28rpx;
+  background-color: #fff;
+  color: #333;
+
+  &.disabled {
+    background-color: #f5f5f5;
+    color: #999;
+  }
 
   &:focus {
     border-color: #007aff;

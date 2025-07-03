@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, shallowRef } from 'vue';
 
-import { BaseContainer } from '@/components/base-components';
-import { provideDynamicUIContext } from '@/hooks/use-dynamic-ui';
+import { useDynamicUIContext } from '@/hooks/use-dynamic-context';
 import useInstallCom from '@/hooks/use-install-com';
-import { IComponentConfig, IModeCondition } from '@/types/component';
+import { IComponentConfig, TValueCondition } from '@/types/component';
+import { parseModeValue } from '@/utils/parse-expression';
 
 defineOptions({
   name: 'DynamicRenderer',
@@ -17,12 +17,15 @@ interface IProps {
 const props = defineProps<IProps>();
 
 const { installCom } = useInstallCom();
-const dynamicContext = provideDynamicUIContext({});
+
+const dynamicContext = useDynamicUIContext();
+
+const { utils: dynamicContextUtils, componentStates } = dynamicContext;
 
 const componentMap = shallowRef<Record<string, any>>({});
 
 const getCurrentComponent = (componentName: string) => {
-  return componentMap.value[componentName] || BaseContainer;
+  return componentMap.value[componentName] || 'text';
 };
 
 // 深度遍历收集componentName并去重
@@ -49,27 +52,11 @@ const collectComponentNames = (config: IComponentConfig[] | IComponentConfig): s
 };
 
 // 处理数据绑定
-const getBindingValue = (binding: IModeCondition | string, componentId: string) => {
-  // 如果是字符串类型的简单绑定
-  if (typeof binding === 'string') {
-    if (binding.startsWith('$$.')) {
-      return dynamicContext.getStateValue(binding.replace('$$.', ''));
-    } else if (binding.startsWith('$.')) {
-      return dynamicContext.getStateValue(binding.replace('$.', ''), componentId);
-    }
-    return binding;
-  }
-
-  // 如果是 IModeCondition 类型的复杂绑定
-  const condition = binding.condition;
-  if (typeof condition === 'string') {
-    if (condition.startsWith('$$.')) {
-      return dynamicContext.getStateValue(condition.replace('$$.', ''));
-    } else if (condition.startsWith('$.')) {
-      return dynamicContext.getStateValue(condition.replace('$.', ''), componentId);
-    }
-  }
-  return condition;
+const getBindingValue = (binding: TValueCondition) => {
+  return parseModeValue(binding, dynamicContext.componentStates, dynamicContext.globalState, {
+    context: dynamicContext,
+    uni: uni,
+  });
 };
 
 // 构建组件属性
@@ -77,15 +64,15 @@ const buildComponentProps = (config: IComponentConfig) => {
   const props = { ...config.props };
 
   // 移除 class 和 style 属性，单独处理
-  delete props.class;
-  delete props.style;
+  Reflect.deleteProperty(props, 'class');
+  Reflect.deleteProperty(props, 'style');
 
   // 处理数据绑定
   if (config.bindings) {
     Object.entries(config.bindings).forEach(([propName, binding]) => {
       // 跳过 class 和 style 的绑定，单独处理
       if (propName !== 'class' && propName !== 'style') {
-        props[propName] = getBindingValue(binding, config.id);
+        props[propName] = getBindingValue(binding);
       }
     });
   }
@@ -108,7 +95,7 @@ const mergedClass = computed(() => {
 
   // 处理绑定的 class
   if (props.config.bindings?.class) {
-    const boundClass = getBindingValue(props.config.bindings.class, props.config.id);
+    const boundClass = getBindingValue(props.config.bindings.class);
     if (boundClass) {
       classNames += (classNames ? ' ' : '') + boundClass;
     }
@@ -131,8 +118,8 @@ const mergedStyle = computed(() => {
   }
 
   // 处理绑定的 style
-  if (props.config.bindings?.style) {
-    const boundStyle = getBindingValue(props.config.bindings.style, props.config.id);
+  if (props.config?.bindings?.style) {
+    const boundStyle = getBindingValue(props.config.bindings.style);
     if (boundStyle && typeof boundStyle === 'object') {
       styles = { ...styles, ...boundStyle };
     }
@@ -143,6 +130,7 @@ const mergedStyle = computed(() => {
 
 // 处理事件
 const handleEvent = (eventType: string, $event: any, config: IComponentConfig) => {
+  console.log('~~ handleEvent', eventType, $event, config);
   if (!config.events || !config.events[eventType]) {
     return;
   }
@@ -152,13 +140,12 @@ const handleEvent = (eventType: string, $event: any, config: IComponentConfig) =
     : [config.events[eventType]];
 
   handlers.forEach(handler => {
-    dynamicContext.handleEvent(eventType, handler, config.id);
+    dynamicContextUtils.handleEvent(handler, config.id);
   });
 };
 
 // 处理点击事件
 const handleClick = (event: any, config: IComponentConfig) => {
-  console.log('~~ handleClick');
   // 处理原有的onClick
   if (!Array.isArray(props.config) && config.props?.onClick) {
     config.props.onClick();
@@ -168,12 +155,19 @@ const handleClick = (event: any, config: IComponentConfig) => {
   handleEvent('click', event, config);
 };
 
+const handleUpdateModelValue = (event: any, config: IComponentConfig) => {
+  dynamicContextUtils.handleEvent(
+    { action: 'update:modelValue', payload: { path: config.id, value: event } },
+    config.id
+  );
+};
+
 function init() {
   const componentNames = collectComponentNames(props.config);
   console.log('收集到的组件名称:', componentNames);
 
   // 初始化配置（状态和事件）
-  dynamicContext.initializeConfig(props.config);
+  dynamicContextUtils.init(props.config);
 
   // 动态加载组件
   if (componentNames.length > 0) {
@@ -199,10 +193,11 @@ onBeforeMount(() => {
     v-else
     :is="getCurrentComponent((config as IComponentConfig).componentName)"
     v-bind="buildComponentProps(config as IComponentConfig)"
+    :modelValue="componentStates[config.id]"
     :style="mergedStyle"
     :class="mergedClass"
     @click="($event: any) => handleClick($event, config as IComponentConfig)"
-    @update:modelValue="($event: any) => handleEvent('update:modelValue', $event, config as IComponentConfig)"
+    @update:modelValue="($event: any) => handleUpdateModelValue($event, config as IComponentConfig)"
     @change="($event: any) => handleEvent('change', $event, config as IComponentConfig)"
     @focus="($event: any) => handleEvent('focus', $event, config as IComponentConfig)"
     @blur="($event: any) => handleEvent('blur', $event, config as IComponentConfig)"

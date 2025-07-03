@@ -72,7 +72,7 @@ export function parseModeValue(
   scope: Record<string, any>,
   allModuleData?: Record<string, any>,
   extraData?: Record<string, any>
-) {
+): any {
   if (!isIModeCondition(valueCondition)) {
     return valueCondition;
   }

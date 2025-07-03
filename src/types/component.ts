@@ -9,7 +9,7 @@ export interface IComponentConfig {
   /** 子组件 */
   children?: IComponentConfig[];
   /** 绑定数据 */
-  bindings?: Record<string, IModeCondition>;
+  bindings?: Record<string, TValueCondition>;
   /** 组件状态 */
   state?: any;
   /** 事件处理器 */

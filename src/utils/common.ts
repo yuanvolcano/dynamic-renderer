@@ -13,3 +13,7 @@ export function getType<T>(target: T) {
 export function isObjectType(target: any): target is object {
   return getType(target) === 'Object';
 }
+
+export function isDevelopment() {
+  return process.env.NODE_ENV === 'development';
+}
