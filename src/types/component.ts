@@ -24,3 +24,5 @@ export interface DynamicUISchema {
     updateTime?: string;
   };
 }
+
+export type TExpression = boolean | number | string | undefined;
