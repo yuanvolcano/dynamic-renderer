@@ -1,7 +1,8 @@
 import { createSSRApp } from 'vue';
 
 import App from './App.vue';
-import './styles/tailwind.css';
+// 引入统一的样式入口文件
+import './styles/index.scss';
 
 export function createApp() {
   const app = createSSRApp(App);

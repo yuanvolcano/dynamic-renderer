@@ -3,6 +3,10 @@ import { computed } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
+defineOptions({
+  name: 'BaseImage',
+});
+
 // 图片组件属性
 export interface IProps extends IBaseComponentProps {
   src: string;
@@ -43,7 +47,7 @@ const handleError = () => {
   <image class="base-image" :style="imageStyle" :src="src" :mode="mode" @load="handleLoad" @error="handleError" />
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-image {
   border-radius: 4rpx;
 }

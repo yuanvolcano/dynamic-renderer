@@ -43,6 +43,16 @@ export default defineConfig(({ mode }) => {
       postcss: {
         plugins: [require('tailwindcss'), require('autoprefixer')],
       },
+      preprocessorOptions: {
+        scss: {
+          // 使用现代 Sass API（sass-embedded 默认支持）
+          api: 'modern',
+          // 静默 deprecation 警告
+          silenceDeprecations: ['legacy-js-api'],
+          // 全局变量注入（如果需要的话）
+          additionalData: ``,
+        },
+      },
     },
     build: {
       target: 'es2015',

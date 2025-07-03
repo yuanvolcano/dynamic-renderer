@@ -3,6 +3,10 @@ import { computed } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
+defineOptions({
+  name: 'BaseInput',
+});
+
 // 输入框组件属性
 export interface IInputProps extends IBaseComponentProps {
   value?: string;
@@ -78,15 +82,15 @@ const handleBlur = () => {
   />
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-input {
   display: block;
   width: 100%;
   box-sizing: border-box;
   outline: none;
-}
 
-.base-input:focus {
-  border-color: #007aff;
+  &:focus {
+    border-color: #007aff;
+  }
 }
 </style>

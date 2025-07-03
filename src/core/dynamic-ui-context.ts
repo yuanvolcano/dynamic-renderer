@@ -121,6 +121,16 @@ export class DynamicUIContext implements IDynamicUIContext {
         uni.navigateTo({ url: handler.payload.url });
         break;
 
+      case 'navigateBack':
+        // 在 H5 环境下使用 history.back() 避免路由冲突
+        // #ifdef H5
+        if (typeof window !== 'undefined' && window.history) {
+          window.history.back();
+        } else {
+          uni.navigateBack({ delta: handler.payload?.delta || 1 });
+        }
+        break;
+
       case 'showToast':
         uni.showToast(handler.payload);
         break;
@@ -158,11 +168,11 @@ export class DynamicUIContext implements IDynamicUIContext {
 
   private setupGlobalEventHandlers(): void {
     // 设置一些全局事件处理器
-    this.eventBus.on('log', data => {
+    this.eventBus.on('log', (data: any) => {
       console.log('DynamicUI Log:', data);
     });
 
-    this.eventBus.on('error', error => {
+    this.eventBus.on('error', (error: any) => {
       console.error('DynamicUI Error:', error);
     });
   }

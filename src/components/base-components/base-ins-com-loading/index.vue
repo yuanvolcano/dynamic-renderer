@@ -10,7 +10,7 @@ defineOptions({
   </view>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .loading-container {
   display: flex;
   align-items: center;

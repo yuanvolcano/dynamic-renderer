@@ -3,20 +3,28 @@ import { computed } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
+defineOptions({
+  name: 'BaseButton',
+});
+
 export interface IProps extends IBaseComponentProps {
   text: string;
   disabled?: boolean;
   loading?: boolean;
+  type?: 'primary' | 'default' | 'warn';
+  size?: 'mini' | 'default';
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   text: '按钮',
+  size: 'default',
   disabled: false,
   loading: false,
+  type: 'primary',
 });
 
-const emit = defineEmits<{
-  click: [];
+const emits = defineEmits<{
+  click: [event: any];
 }>();
 
 const buttonStyle = computed(() => {
@@ -32,12 +40,15 @@ const buttonStyle = computed(() => {
   };
 });
 
-const handleClick = () => {
-  if (!props.disabled && !props.loading) {
-    emit('click');
-    if (props.onClick) {
-      props.onClick();
-    }
+const handleClick = (event: any) => {
+  if (props.disabled || props.loading) {
+    return;
+  }
+
+  if (props.onClick) {
+    props.onClick?.(event);
+  } else {
+    emits('click', event);
   }
 };
 </script>
@@ -49,14 +60,14 @@ const handleClick = () => {
   </button>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-button {
   display: inline-block;
   text-align: center;
   transition: all 0.3s ease;
-}
 
-.base-button:active {
-  opacity: 0.8;
+  &:active {
+    opacity: 0.8;
+  }
 }
 </style>

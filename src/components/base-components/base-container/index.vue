@@ -3,6 +3,10 @@ import { computed } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
+defineOptions({
+  name: 'BaseContainer',
+});
+
 // 容器组件属性
 export interface IProps extends IBaseComponentProps {
   direction?: 'row' | 'column';
@@ -33,7 +37,7 @@ const containerStyle = computed(() => {
   </view>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-container {
   box-sizing: border-box;
 }

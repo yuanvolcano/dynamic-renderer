@@ -21,7 +21,7 @@ export interface IComponentConfig {
 // 基础组件属性接口
 export interface IBaseComponentProps {
   style?: Record<string, any>;
-  onClick?: () => void;
+  onClick?: (_event: any) => void;
 }
 
 // 动态UI数据结构

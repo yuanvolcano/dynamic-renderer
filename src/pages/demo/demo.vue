@@ -266,7 +266,7 @@ const goToLayout = () => {
   </view>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .container {
   padding: 40rpx;
 }
@@ -312,21 +312,21 @@ const goToLayout = () => {
   border-radius: 12rpx;
   padding: 20rpx;
   border: none;
-}
 
-.action-btn.primary {
-  background-color: #007aff;
-  color: #fff;
-}
+  &.primary {
+    background-color: #007aff;
+    color: #fff;
+  }
 
-.action-btn.default {
-  background-color: #f8f8f8;
-  color: #333;
-  border: 1rpx solid #e5e5e5;
-}
+  &.default {
+    background-color: #f8f8f8;
+    color: #333;
+    border: 1rpx solid #e5e5e5;
+  }
 
-.action-btn.layout {
-  background-color: #28a745;
-  color: #fff;
+  &.layout {
+    background-color: #28a745;
+    color: #fff;
+  }
 }
 </style>

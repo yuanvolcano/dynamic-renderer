@@ -27,8 +27,8 @@ const layoutConfig = ref<IComponentConfig[]>([
     componentName: 'BaseContainer',
     props: {
       style: {
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: '#f5f5f5',
@@ -75,6 +75,7 @@ const layoutConfig = ref<IComponentConfig[]>([
         id: 'main-body',
         componentName: 'BaseContainer',
         props: {
+          direction: 'row',
           class: 'flex flex-1 overflow-hidden',
         },
         children: [
@@ -261,7 +262,6 @@ const layoutConfig = ref<IComponentConfig[]>([
                   click: {
                     type: 'click',
                     action: 'navigateBack',
-                    payload: {},
                   },
                 },
               },
@@ -285,10 +285,10 @@ const goBack = () => {
   </view>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .layout-page {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 </style>

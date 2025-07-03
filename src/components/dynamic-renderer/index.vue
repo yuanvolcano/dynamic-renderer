@@ -158,6 +158,7 @@ const handleEvent = (eventType: string, $event: any, config: IComponentConfig) =
 
 // 处理点击事件
 const handleClick = (event: any, config: IComponentConfig) => {
+  console.log('~~ handleClick');
   // 处理原有的onClick
   if (!Array.isArray(props.config) && config.props?.onClick) {
     config.props.onClick();
@@ -212,6 +213,6 @@ onBeforeMount(() => {
   </component>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 /* 动态渲染器本身不需要特殊样式 */
 </style>

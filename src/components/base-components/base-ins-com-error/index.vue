@@ -10,7 +10,7 @@ defineOptions({
   </view>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .error-container {
   display: flex;
   align-items: center;

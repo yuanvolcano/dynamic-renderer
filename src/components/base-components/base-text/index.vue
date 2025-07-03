@@ -3,6 +3,10 @@ import { computed } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
+defineOptions({
+  name: 'BaseText',
+});
+
 // 文本组件属性
 export interface IProps extends IBaseComponentProps {
   content: string;
@@ -31,7 +35,7 @@ const textStyle = computed(() => {
   </text>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-text {
   display: block;
   word-wrap: break-word;
