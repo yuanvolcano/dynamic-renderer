@@ -1,17 +1,3 @@
-<template>
-  <input
-    class="base-input"
-    :style="inputStyle"
-    :value="modelValue"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :type="inputType"
-    @input="handleInput"
-    @focus="handleFocus"
-    @blur="handleBlur"
-  />
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 
@@ -77,6 +63,20 @@ const handleBlur = () => {
   emit('blur');
 };
 </script>
+
+<template>
+  <input
+    class="base-input"
+    :style="inputStyle"
+    :value="modelValue"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :type="inputType"
+    @input="handleInput"
+    @focus="handleFocus"
+    @blur="handleBlur"
+  />
+</template>
 
 <style scoped>
 .base-input {

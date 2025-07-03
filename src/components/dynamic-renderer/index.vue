@@ -1,29 +1,3 @@
-<template>
-  <!-- 支持数组和单个配置 -->
-  <template v-if="Array.isArray(config)">
-    <DynamicRenderer
-      v-for="item in config"
-      :key="item.id"
-      :config="item"
-    />
-  </template>
-  <component
-    v-else
-    :is="getCurrentComponent(config.componentName)"
-    v-bind="config.props"
-    :style="mergedStyle"
-    @click="handleClick"
-  >
-    <template v-if="config.children">
-      <DynamicRenderer
-        v-for="child in config.children"
-        :key="child.id"
-        :config="child"
-      />
-    </template>
-  </component>
-</template>
-
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue';
 import { IComponentConfig } from '@/types/component';
@@ -37,6 +11,7 @@ defineOptions({
 
 interface IProps {
   config: IComponentConfig[] | IComponentConfig;
+  getComponentMap?: (componentName: string) => any;
 }
 
 const props = defineProps<IProps>();
@@ -46,6 +21,11 @@ const { installCom } = useInstallCom();
 const componentMap = shallowRef<Record<string, any>>({});
 
 const getCurrentComponent = (componentName: string) => {
+  // 优先使用外部传入的组件映射函数
+  if (props.getComponentMap) {
+    return props.getComponentMap(componentName);
+  }
+  // 否则使用内部动态加载的组件
   return componentMap.value[componentName] || BaseContainer;
 };
 
@@ -71,7 +51,6 @@ const collectComponentNames = (config: IComponentConfig[] | IComponentConfig): s
 
   return Array.from(componentNames);
 };
-
 
 // 合并样式
 const mergedStyle = computed(() => {
@@ -106,6 +85,34 @@ watch(() => props.config, (newConfig) => {
   }
 }, { immediate: true, deep: true });
 </script>
+
+<template>
+  <!-- 支持数组和单个配置 -->
+  <template v-if="Array.isArray(config)">
+    <DynamicRenderer
+      v-for="item in config"
+      :key="item.id"
+      :config="item"
+      :getComponentMap="getComponentMap"
+    />
+  </template>
+  <component
+    v-else
+    :is="getCurrentComponent(config.componentName)"
+    v-bind="config.props"
+    :style="mergedStyle"
+    @click="handleClick"
+  >
+    <template v-if="config.children">
+      <DynamicRenderer
+        v-for="child in config.children"
+        :key="child.id"
+        :config="child"
+        :getComponentMap="getComponentMap"
+      />
+    </template>
+  </component>
+</template>
 
 <style scoped>
 /* 动态渲染器本身不需要特殊样式 */

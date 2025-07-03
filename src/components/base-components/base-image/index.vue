@@ -1,14 +1,3 @@
-<template>
-  <image
-    class="base-image"
-    :style="imageStyle"
-    :src="src"
-    :mode="mode"
-    @load="handleLoad"
-    @error="handleError"
-  />
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IBaseComponentProps } from '@/types/component';
@@ -48,6 +37,17 @@ const handleError = () => {
   emit('error');
 };
 </script>
+
+<template>
+  <image
+    class="base-image"
+    :style="imageStyle"
+    :src="src"
+    :mode="mode"
+    @load="handleLoad"
+    @error="handleError"
+  />
+</template>
 
 <style scoped>
 .base-image {

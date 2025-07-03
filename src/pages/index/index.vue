@@ -1,27 +1,3 @@
-<template>
-  <view class="container">
-    <view class="header">
-      <text class="title">跨平台动态UI</text>
-      <text class="subtitle">基于 Vue3 + uniapp 的跨平台解决方案</text>
-    </view>
-
-    <view class="features">
-      <view class="feature-item" v-for="feature in features" :key="feature.id">
-        <view class="feature-icon">{{ feature.icon }}</view>
-        <view class="feature-content">
-          <text class="feature-title">{{ feature.title }}</text>
-          <text class="feature-desc">{{ feature.description }}</text>
-        </view>
-      </view>
-    </view>
-
-    <view class="actions">
-      <button class="action-btn primary" @click="navigateToDemo">查看组件演示</button>
-      <button class="action-btn default" @click="loadDynamicUI">加载动态UI</button>
-    </view>
-  </view>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 
@@ -72,6 +48,30 @@ const loadDynamicUI = () => {
   });
 };
 </script>
+
+<template>
+  <view class="container">
+    <view class="header">
+      <text class="title">跨平台动态UI</text>
+      <text class="subtitle">基于 Vue3 + uniapp 的跨平台解决方案</text>
+    </view>
+
+    <view class="features">
+      <view class="feature-item" v-for="feature in features" :key="feature.id">
+        <view class="feature-icon">{{ feature.icon }}</view>
+        <view class="feature-content">
+          <text class="feature-title">{{ feature.title }}</text>
+          <text class="feature-desc">{{ feature.description }}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="actions">
+      <button class="action-btn primary" @click="navigateToDemo">查看组件演示</button>
+      <button class="action-btn default" @click="loadDynamicUI">加载动态UI</button>
+    </view>
+  </view>
+</template>
 
 <style scoped>
 .container {

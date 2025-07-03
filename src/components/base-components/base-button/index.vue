@@ -1,10 +1,3 @@
-<template>
-  <button class="base-button" :style="buttonStyle" :disabled="disabled" @click="handleClick">
-    <text v-if="loading">加载中...</text>
-    <text v-else>{{ text }}</text>
-  </button>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 
@@ -48,6 +41,13 @@ const handleClick = () => {
   }
 };
 </script>
+
+<template>
+  <button class="base-button" :style="buttonStyle" :disabled="disabled" @click="handleClick">
+    <text v-if="loading">加载中...</text>
+    <text v-else>{{ text }}</text>
+  </button>
+</template>
 
 <style scoped>
 .base-button {

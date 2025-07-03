@@ -1,9 +1,3 @@
-<template>
-  <text class="base-text" :style="textStyle">
-    {{ content }}
-  </text>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IBaseComponentProps } from '@/types/component';
@@ -29,6 +23,12 @@ const textStyle = computed(() => {
   };
 });
 </script>
+
+<template>
+  <text class="base-text" :style="textStyle">
+    {{ content }}
+  </text>
+</template>
 
 <style scoped>
 .base-text {

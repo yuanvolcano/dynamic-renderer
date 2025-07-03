@@ -1,9 +1,3 @@
-<template>
-  <view class="base-container" :style="containerStyle">
-    <slot />
-  </view>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IBaseComponentProps } from '@/types/component';
@@ -31,6 +25,12 @@ const containerStyle = computed(() => {
   };
 });
 </script>
+
+<template>
+  <view class="base-container" :style="containerStyle">
+    <slot />
+  </view>
+</template>
 
 <style scoped>
 .base-container {

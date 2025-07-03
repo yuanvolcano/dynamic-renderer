@@ -1,14 +1,14 @@
-<template>
-  <view class="error-container">
-    <text class="error-text">组件加载失败</text>
-  </view>
-</template>
-
 <script setup lang="ts">
 defineOptions({
   name: 'BaseInsComError',
 });
 </script>
+
+<template>
+  <view class="error-container">
+    <text class="error-text">组件加载失败</text>
+  </view>
+</template>
 
 <style scoped>
 .error-container {

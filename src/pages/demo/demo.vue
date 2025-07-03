@@ -1,27 +1,3 @@
-<template>
-  <view class="container">
-    <view class="header">
-      <text class="title">组件演示</text>
-      <text class="subtitle">展示跨平台动态UI组件</text>
-    </view>
-
-    <view class="demo-section">
-      <text class="section-title">基础组件</text>
-
-      <!-- 动态渲染的组件区域 -->
-      <view class="component-container">
-        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component"
-          :getComponentMap="getComponentMap" />
-      </view>
-    </view>
-
-    <view class="actions">
-      <button class="action-btn primary" @click="addComponent">添加组件</button>
-      <button class="action-btn default" @click="loadPreset">加载预设</button>
-    </view>
-  </view>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue';
 import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
@@ -155,6 +131,30 @@ const loadPreset = () => {
   demoComponents.value.push(preset);
 };
 </script>
+
+<template>
+  <view class="container">
+    <view class="header">
+      <text class="title">组件演示</text>
+      <text class="subtitle">展示跨平台动态UI组件</text>
+    </view>
+
+    <view class="demo-section">
+      <text class="section-title">基础组件</text>
+
+      <!-- 动态渲染的组件区域 -->
+      <view class="component-container">
+        <DynamicRenderer v-for="component in demoComponents" :key="component.id" :config="component"
+          :getComponentMap="getComponentMap" />
+      </view>
+    </view>
+
+    <view class="actions">
+      <button class="action-btn primary" @click="addComponent">添加组件</button>
+      <button class="action-btn default" @click="loadPreset">加载预设</button>
+    </view>
+  </view>
+</template>
 
 <style scoped>
 .container {
