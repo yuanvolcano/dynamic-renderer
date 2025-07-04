@@ -26,7 +26,7 @@ export const formDemoConfig: IComponentConfig[] = [
             id: 'basic_inputs_section',
             componentName: 'BaseContainer',
             props: {
-              class: 'mb-8',
+              class: 'mb-6',
             },
             children: [
               {
@@ -236,7 +236,7 @@ export const formDemoConfig: IComponentConfig[] = [
                 id: 'textarea_group',
                 componentName: 'BaseContainer',
                 props: {
-                  class: 'mb-6',
+                  class: 'mb-4',
                 },
                 children: [
                   {
@@ -261,13 +261,12 @@ export const formDemoConfig: IComponentConfig[] = [
               },
             ],
           },
-
           // 选择组件组
           {
             id: 'selection_section',
             componentName: 'BaseContainer',
             props: {
-              class: 'mb-8',
+              class: 'mb-6',
             },
             children: [
               {
@@ -353,7 +352,7 @@ export const formDemoConfig: IComponentConfig[] = [
             id: 'toggle_section',
             componentName: 'BaseContainer',
             props: {
-              class: 'mb-8',
+              class: 'mb-6',
             },
             children: [
               {

@@ -115,11 +115,26 @@ export function createContextUtils(
     }
   };
 
-  // 处理组件显隐变化时的默认值重置
-  const handleVisibilityChange = (config: IComponentConfig, isVisible: boolean): void => {
-    if (!isVisible && config.defaultValue !== undefined) {
+  // 递归重置组件及其所有子组件的默认值 - 内部函数
+  const _resetComponentAndChildren = (config: IComponentConfig): void => {
+    // 重置当前组件的默认值
+    if (config.defaultValue !== undefined) {
       console.log(`~~ Resetting component ${config.id} to default value:`, config.defaultValue);
       setComponentState(config.id, config.defaultValue);
+    }
+
+    // 递归重置所有子组件
+    if (config.children && config.children.length > 0) {
+      config.children.forEach(child => {
+        _resetComponentAndChildren(child);
+      });
+    }
+  };
+
+  // 处理组件显隐变化时的默认值重置
+  const handleVisibilityChange = (config: IComponentConfig, isVisible: boolean): void => {
+    if (!isVisible) {
+      _resetComponentAndChildren(config);
     }
   };
 
