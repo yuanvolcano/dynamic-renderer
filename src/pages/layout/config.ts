@@ -201,11 +201,27 @@ export const layoutConfig: IComponentConfig[] = [
                 ],
               },
               {
+                id: 'img_desc',
+                componentName: 'BaseText',
+                props: {
+                  content: 'Base Image 组件',
+                  class: 'text-white text-base',
+                },
+              },
+              {
                 id: 'img_1',
                 componentName: 'BaseImage',
                 props: {
                   class: 'w-[300rpx] h-[300rpx]',
                   src: 'https://xmp.mobvista.com/static/media/gamehaus-image.81ac38f4784e749e2374.jpg',
+                },
+              },
+              {
+                id: 'input_desc',
+                componentName: 'BaseText',
+                props: {
+                  content: 'Base Input 组件',
+                  class: 'text-white text-base',
                 },
               },
               {
