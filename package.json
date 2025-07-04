@@ -94,6 +94,8 @@
     "@unocss/preset-icons": "^0.63.6",
     "czg": "^1.11.0",
     "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.32.0",
     "lint-staged": "^16.0.0",
     "miniprogram-api-typings": "^4.0.7",
     "picocolors": "^1.1.1",

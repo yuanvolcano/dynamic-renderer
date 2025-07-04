@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import pngNotPic from '@/assets/images/not-pic.png';
+import pngNotPic from '@/static/images/not-pic.png';
 import { IBaseComponentProps } from '@/types/component';
 
 defineOptions({
@@ -48,14 +48,7 @@ const handleError = (e: any) => {
 </script>
 
 <template>
-  <image
-    v-loading="isLoading"
-    class="base-image"
-    :src="innerSrc"
-    :mode="mode"
-    @load="handleLoad"
-    @error="handleError"
-  />
+  <image class="base-image" :src="innerSrc" :mode="mode" @load="handleLoad" @error="handleError" />
 </template>
 
 <style lang="scss" scoped>

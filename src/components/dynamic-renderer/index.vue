@@ -79,7 +79,12 @@ onBeforeMount(() => {
 
 <template>
   <template v-for="config in normalizedConfigs" :key="config.id">
-    <DynamicUIRenderer :config="config" :getCurrentComponent="getCurrentComponent" :dynamic-context="dynamicContext" />
+    <DynamicUIRenderer
+      :config="config"
+      :component-map="componentMap"
+      :getCurrentComponent="getCurrentComponent"
+      :dynamic-context="dynamicContext"
+    />
   </template>
 </template>
 

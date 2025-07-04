@@ -46,14 +46,14 @@
     "list": [
       {
         "pagePath": "pages/home/index",
-        "iconPath": "static/tab_home.png",
-        "selectedIconPath": "static/tab_home_active.png",
+        "iconPath": "static/images/tabbar/icon_home.png",
+        "selectedIconPath": "static/images/tabbar/icon_home_selected.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/demo/index",
-        "iconPath": "static/tab_demo.png",
-        "selectedIconPath": "static/tab_demo_active.png",
+        "iconPath": "static/images/tabbar/icon_me.png",
+        "selectedIconPath": "static/images/tabbar/icon_me_selected.png",
         "text": "演示"
       }
     ]
