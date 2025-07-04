@@ -377,7 +377,6 @@ export const formDemoConfig: IComponentConfig[] = [
                     componentName: 'BaseCheckbox',
                     props: {
                       label: '我已阅读并同意服务条款',
-                      class: 'flex items-center gap-3',
                     },
                     defaultValue: false,
                   },
