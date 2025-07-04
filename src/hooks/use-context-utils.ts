@@ -46,7 +46,6 @@ export function createContextUtils(
 ): IContextUtils {
   // 设置组件状态
   const setComponentState = (componentId: string, state: any): void => {
-    console.log('~~ setComponentState', componentId, state);
     componentStates[componentId] = state;
   };
 
@@ -57,7 +56,6 @@ export function createContextUtils(
 
   // 更新状态
   const updateState = (path: string, value: any, componentId?: string): void => {
-    console.log('~~ updateState', path, value, componentId);
     const targetState = componentId ? componentStates : globalState;
 
     if (path.includes('.')) {
@@ -105,12 +103,12 @@ export function createContextUtils(
 
   // 判断组件是否可见
   const isComponentVisible = (config: IComponentConfig): boolean => {
-    if (!config.visibleOptions) {
+    if (config.visibleOption === void 0) {
       return true; // 没有配置显隐条件，默认显示
     }
 
     try {
-      return parseModeValue(config.visibleOptions, componentStates, globalState, createParseContext());
+      return parseModeValue(config.visibleOption, componentStates, globalState, createParseContext());
     } catch (error) {
       console.warn(`Error evaluating visibility for component ${config.id}:`, error);
       return true; // 出错时默认显示
@@ -177,6 +175,8 @@ export function createContextUtils(
       case 'custom':
         parseModeValue(handler.payload, componentStates, globalState, createParseContext());
         break;
+
+      // 这里可以继续扩展事件处理
 
       default:
         console.warn(`Unknown action: ${handler.action}`);

@@ -62,8 +62,6 @@ function init() {
   // 初始化配置（状态和事件）
   dynamicContextUtils.init(props.config);
 
-  console.log('~~ componentStates', dynamicContext.componentStates);
-
   // 动态加载组件
   if (componentNames.length > 0) {
     const result = installCom(componentNames);

@@ -130,6 +130,10 @@ const handleUpdateModelValue = (event: any, config: IComponentConfig) => {
 
 // 判断组件是否可见
 const isVisible = computed(() => {
+  if (props.config.visibleOption === void 0) {
+    return true;
+  }
+
   return props.dynamicContext.utils.isComponentVisible(props.config);
 });
 
@@ -147,7 +151,7 @@ watch(
 </script>
 
 <template>
-  <!-- 根据 visibleOptions 控制组件显隐 -->
+  <!-- 根据 visibleOption 控制组件显隐 -->
   <component
     v-if="isVisible"
     :is="getCurrentComponent(config.componentName)"

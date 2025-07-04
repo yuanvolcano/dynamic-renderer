@@ -17,6 +17,12 @@
       "style": {
         "navigationBarTitleText": "布局展示"
       }
+    },
+    {
+      "path": "pages/form-demo/form-demo",
+      "style": {
+        "navigationBarTitleText": "表单演示"
+      }
     }
   ],
   "globalStyle": {

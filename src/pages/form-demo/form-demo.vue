@@ -1,0 +1,449 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+
+import { formDemoConfig as staticFormConfig } from './config';
+
+import { ConfigLoaderResponse, loadConfigFromLocal, loadConfigFromNetwork } from '@/api/config-loader';
+import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
+import { IComponentConfig } from '@/types/component';
+import { isDevelopment } from '@/utils/common';
+
+// 配置加载状态
+const loading = ref(false);
+const error = ref<string>('');
+const formConfig = ref<IComponentConfig[]>([]);
+
+// 环境检查
+const isDevelopmentBol = isDevelopment();
+
+/**
+ * 从网络加载配置
+ */
+async function loadRemoteConfig(): Promise<void> {
+  loading.value = true;
+  error.value = '';
+
+  try {
+    // 尝试从网络加载配置
+    const result: ConfigLoaderResponse<IComponentConfig[]> = await loadConfigFromNetwork(
+      'https://api.example.com/form-config', // 实际的配置API地址
+      {
+        timeout: 5000,
+        retries: 2,
+        cache: true,
+        cacheTime: 10 * 60 * 1000, // 10分钟缓存
+      }
+    );
+
+    if (result.success && result.data) {
+      console.log('成功从网络加载表单配置');
+      formConfig.value = result.data;
+    } else {
+      throw new Error(result.message || '网络配置加载失败');
+    }
+  } catch (networkError: any) {
+    console.warn('网络配置加载失败，使用本地配置:', networkError.message);
+    error.value = `网络加载失败: ${networkError.message}`;
+
+    // 网络加载失败时，使用本地配置作为fallback
+    await loadLocalConfig();
+  } finally {
+    loading.value = false;
+  }
+}
+
+/**
+ * 加载本地配置（作为fallback或开发模式使用）
+ */
+async function loadLocalConfig(): Promise<void> {
+  try {
+    console.log('使用本地表单配置');
+    const result = await loadConfigFromLocal(staticFormConfig, 300); // 模拟300ms网络延迟
+
+    if (result.success && result.data) {
+      formConfig.value = result.data;
+      if (!error.value) {
+        error.value = ''; // 清空错误信息
+      }
+    } else {
+      throw new Error(result.message || '本地配置加载失败');
+    }
+  } catch (localError: any) {
+    console.error('本地配置加载失败:', localError.message);
+    error.value = `配置加载失败: ${localError.message}`;
+
+    // 作为最后的fallback，直接使用静态配置
+    formConfig.value = staticFormConfig;
+  }
+}
+
+/**
+ * 重新加载配置
+ */
+async function reloadConfig(): Promise<void> {
+  await loadRemoteConfig();
+}
+
+/**
+ * 强制使用本地配置
+ */
+async function useLocalConfig(): Promise<void> {
+  loading.value = true;
+  error.value = '';
+
+  try {
+    await loadLocalConfig();
+  } finally {
+    loading.value = false;
+  }
+}
+
+// 页面挂载时加载配置
+onMounted(async () => {
+  // 开发环境优先使用本地配置，生产环境优先使用网络配置
+  if (isDevelopmentBol) {
+    console.log('开发模式：使用本地表单配置');
+    await useLocalConfig();
+  } else {
+    console.log('生产模式：尝试网络表单配置');
+    await loadRemoteConfig();
+  }
+});
+</script>
+
+<template>
+  <view class="form-demo-page">
+    <!-- 加载状态 -->
+    <view v-if="loading" class="loading-overlay">
+      <view class="loading-content">
+        <view class="loading-spinner"></view>
+        <text class="loading-text">表单配置加载中...</text>
+      </view>
+    </view>
+
+    <!-- 错误状态 -->
+    <view v-else-if="error && formConfig.length === 0" class="error-overlay">
+      <view class="error-content">
+        <view class="error-icon">⚠️</view>
+        <text class="error-title">表单配置加载失败</text>
+        <text class="error-message">{{ error }}</text>
+        <view class="error-actions">
+          <button class="retry-btn" @click="reloadConfig">
+            <text class="btn-icon">🔄</text>
+            <text>重新加载</text>
+          </button>
+          <button class="local-btn" @click="useLocalConfig">
+            <text class="btn-icon">📁</text>
+            <text>使用本地配置</text>
+          </button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 正常渲染 -->
+    <template v-else>
+      <!-- 错误提示（有配置但存在错误） -->
+      <view v-if="error" class="error-banner">
+        <view class="error-banner-content">
+          <text class="error-banner-icon">⚠️</text>
+          <text class="error-banner-text">{{ error }}</text>
+        </view>
+        <button class="error-banner-close" @click="error = ''">×</button>
+      </view>
+
+      <!-- 配置化表单渲染 -->
+      <DynamicRenderer :config="formConfig" />
+
+      <!-- 开发调试工具 -->
+      <view v-if="isDevelopmentBol" class="debug-tools">
+        <view class="debug-tools-title">开发工具</view>
+        <view class="debug-buttons">
+          <button class="debug-btn reload-btn" @click="reloadConfig">
+            <text class="debug-btn-icon">🔄</text>
+            <text class="debug-btn-text">重新加载</text>
+          </button>
+          <button class="debug-btn local-btn" @click="useLocalConfig">
+            <text class="debug-btn-icon">📁</text>
+            <text class="debug-btn-text">本地配置</text>
+          </button>
+        </view>
+        <text class="debug-info">配置项: {{ formConfig.length }}</text>
+      </view>
+    </template>
+  </view>
+</template>
+
+<style lang="scss" scoped>
+.form-demo-page {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 加载状态样式 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  background: white;
+  border-radius: 24rpx;
+  padding: 80rpx 100rpx;
+  text-align: center;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.2);
+
+  .loading-spinner {
+    width: 80rpx;
+    height: 80rpx;
+    border: 6rpx solid #f3f3f3;
+    border-top: 6rpx solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 40rpx;
+  }
+
+  .loading-text {
+    font-size: 32rpx;
+    color: #333;
+    font-weight: 500;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 错误状态样式 */
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 40rpx;
+}
+
+.error-content {
+  background: white;
+  border-radius: 32rpx;
+  padding: 80rpx 60rpx;
+  text-align: center;
+  box-shadow: 0 20rpx 60rpx rgba(0, 0, 0, 0.2);
+  max-width: 600rpx;
+
+  .error-icon {
+    font-size: 120rpx;
+    margin-bottom: 40rpx;
+  }
+
+  .error-title {
+    font-size: 48rpx;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+    display: block;
+  }
+
+  .error-message {
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 60rpx;
+    display: block;
+    line-height: 1.5;
+  }
+}
+
+.error-actions {
+  display: flex;
+  gap: 30rpx;
+  justify-content: center;
+
+  button {
+    padding: 24rpx 48rpx;
+    border-radius: 16rpx;
+    border: none;
+    font-size: 28rpx;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+    transition: all 0.3s ease;
+
+    .btn-icon {
+      font-size: 32rpx;
+    }
+  }
+
+  .retry-btn {
+    background: #667eea;
+    color: white;
+
+    &:hover {
+      background: #5a67d8;
+      transform: translateY(-2rpx);
+    }
+  }
+
+  .local-btn {
+    background: #48bb78;
+    color: white;
+
+    &:hover {
+      background: #38a169;
+      transform: translateY(-2rpx);
+    }
+  }
+}
+
+/* 错误横幅样式 */
+.error-banner {
+  position: sticky;
+  top: 0;
+  background: linear-gradient(90deg, #ff6b6b, #feca57);
+  color: white;
+  padding: 24rpx 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.error-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+
+  .error-banner-icon {
+    font-size: 32rpx;
+  }
+
+  .error-banner-text {
+    font-size: 28rpx;
+    font-weight: 500;
+  }
+}
+
+.error-banner-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  font-size: 40rpx;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* 开发调试工具样式 */
+.debug-tools {
+  position: fixed;
+  bottom: 40rpx;
+  right: 40rpx;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10rpx);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  min-width: 300rpx;
+  z-index: 1000;
+
+  .debug-tools-title {
+    color: white;
+    font-size: 24rpx;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+    text-align: center;
+  }
+
+  .debug-buttons {
+    display: flex;
+    gap: 20rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .debug-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1rpx solid rgba(255, 255, 255, 0.2);
+    border-radius: 12rpx;
+    padding: 16rpx 20rpx;
+    color: white;
+    font-size: 20rpx;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8rpx;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2rpx);
+    }
+
+    .debug-btn-icon {
+      font-size: 24rpx;
+    }
+
+    .debug-btn-text {
+      font-size: 18rpx;
+    }
+  }
+
+  .debug-info {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20rpx;
+    text-align: center;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .debug-tools {
+    right: 20rpx;
+    bottom: 20rpx;
+    min-width: 250rpx;
+    padding: 24rpx;
+  }
+
+  .error-content {
+    padding: 60rpx 40rpx;
+    margin: 0 20rpx;
+  }
+
+  .loading-content {
+    padding: 60rpx 80rpx;
+    margin: 0 40rpx;
+  }
+}
+</style>

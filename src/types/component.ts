@@ -15,7 +15,7 @@ export interface IComponentConfig {
   /** 事件处理器 */
   events?: Record<string, IEventHandler | IEventHandler[]>;
   /** 显隐式控制 */
-  visibleOptions?: TValueCondition;
+  visibleOption?: TValueCondition;
   /** 预留其他属性，方便扩展 */
   [key: string]: any;
 }

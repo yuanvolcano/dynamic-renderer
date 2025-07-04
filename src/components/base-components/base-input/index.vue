@@ -77,6 +77,7 @@ const handleBlur = () => {
   display: block;
   box-sizing: border-box;
   outline: none;
+  height: 80rpx;
   padding: 20rpx;
   border-radius: 8rpx;
   border: 2rpx solid #e5e5e5;

@@ -1,7 +1,11 @@
-import { defineAsyncComponent } from 'vue';
-
-export { default as BaseContainer } from './base-container/index.vue';
-export { default as BaseText } from './base-text/index.vue';
 export { default as BaseButton } from './base-button/index.vue';
-export { default as BaseInput } from './base-input/index.vue';
+export * from './base-checkbox';
+export { default as BaseContainer } from './base-container/index.vue';
 export { default as BaseImage } from './base-image/index.vue';
+export { default as BaseInput } from './base-input/index.vue';
+export * from './base-radio';
+export * from './base-radio-group';
+export * from './base-select';
+export * from './base-switch';
+export { default as BaseText } from './base-text/index.vue';
+export * from './base-textarea';
