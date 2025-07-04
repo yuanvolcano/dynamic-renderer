@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 
+import { IDynamicContextReturn } from '@/hooks/use-dynamic-context';
 import { IComponentConfig, TValueCondition } from '@/types/component';
 import { parseModeValue } from '@/utils/parse-expression';
 
@@ -11,17 +12,19 @@ defineOptions({
 interface IProps {
   config: IComponentConfig;
   getCurrentComponent: (componentName: string) => string;
-  dynamicContext: any;
+  dynamicContext: IDynamicContextReturn;
 }
 
 const props = defineProps<IProps>();
 
 // 处理数据绑定
 const getBindingValue = (binding: TValueCondition) => {
-  return parseModeValue(binding, props.dynamicContext.componentStates, props.dynamicContext.globalState, {
-    context: props.dynamicContext,
-    uni: uni,
-  });
+  return parseModeValue(
+    binding,
+    props.dynamicContext.componentStates,
+    props.dynamicContext.globalState,
+    props.dynamicContext.utils.createParseContext()
+  );
 };
 
 // 构建组件属性
@@ -124,10 +127,29 @@ const handleUpdateModelValue = (event: any, config: IComponentConfig) => {
     config.id
   );
 };
+
+// 判断组件是否可见
+const isVisible = computed(() => {
+  return props.dynamicContext.utils.isComponentVisible(props.config);
+});
+
+// 监听显隐变化，处理默认值重置
+watch(
+  () => isVisible.value,
+  (newVisible: boolean, oldVisible: boolean) => {
+    // 只有从显示变为隐藏时才处理默认值重置
+    if (oldVisible === true && newVisible === false) {
+      props.dynamicContext.utils.handleVisibilityChange(props.config, newVisible);
+    }
+  },
+  { immediate: false } // 不立即执行，避免初始化时误触发
+);
 </script>
 
 <template>
+  <!-- 根据 visibleOptions 控制组件显隐 -->
   <component
+    v-if="isVisible"
     :is="getCurrentComponent(config.componentName)"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"

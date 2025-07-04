@@ -10,10 +10,12 @@ export interface IComponentConfig {
   children?: IComponentConfig[];
   /** 绑定数据 */
   bindings?: Record<string, TValueCondition>;
-  /** 组件状态 */
-  state?: any;
+  /** 组件默认值 */
+  defaultValue?: any;
   /** 事件处理器 */
   events?: Record<string, IEventHandler | IEventHandler[]>;
+  /** 显隐式控制 */
+  visibleOptions?: TValueCondition;
   /** 预留其他属性，方便扩展 */
   [key: string]: any;
 }
@@ -42,11 +44,11 @@ export enum EValueMode {
   PARSE = 'parse',
 }
 
-export type TExpression = boolean | number | string | undefined;
+export type TExpression = boolean | number | undefined | string;
 
 export interface IModeCondition {
   mode: EValueMode;
-  condition: TExpression;
+  condition: TExpression | string[];
 }
 
 export type TValueCondition = boolean | number | string | undefined | IModeCondition;

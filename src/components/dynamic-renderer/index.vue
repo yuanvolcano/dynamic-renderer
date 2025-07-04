@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeMount, shallowRef } from 'vue';
 
-import DynamicUIRenderer from './ui-renderer/index.vue';
+import DynamicUIRenderer from './dynamic-ui-renderer/index.vue';
 
 import { useDynamicContext } from '@/hooks/use-dynamic-context';
 import useInstallCom from '@/hooks/use-install-com';

@@ -23,7 +23,7 @@ export const layoutConfig: IComponentConfig[] = [
         id: 'header',
         componentName: 'BaseContainer',
         props: {
-          class: 'flex items-center justify-between px-8 py-4 bg-red-500 text-white',
+          class: 'flex items-center justify-between px-8 py-4 bg-gray-200 text-white',
           style: {
             width: '100%',
             height: '120rpx',
@@ -156,7 +156,7 @@ export const layoutConfig: IComponentConfig[] = [
             id: 'content',
             componentName: 'BaseContainer',
             props: {
-              class: 'flex-1 bg-gray-200 text-white p-8 overflow-auto',
+              class: 'flex-1 bg-white text-white p-8 overflow-auto',
             },
             children: [
               {
