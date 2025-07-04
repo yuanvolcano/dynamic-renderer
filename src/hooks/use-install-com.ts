@@ -1,6 +1,42 @@
 import { defineAsyncComponent } from 'vue';
 
+// #ifdef MP-WEIXIN
+import BaseButton from '@/components/base-components/base-button/index.vue';
+import BaseCheckbox from '@/components/base-components/base-checkbox/index.vue';
+import BaseContainer from '@/components/base-components/base-container/index.vue';
+import BaseImage from '@/components/base-components/base-image/index.vue';
+import BaseInput from '@/components/base-components/base-input/index.vue';
+import BaseInsComError from '@/components/base-components/base-ins-com-error/index.vue';
+import BaseInsComLoading from '@/components/base-components/base-ins-com-loading/index.vue';
+import BaseRadio from '@/components/base-components/base-radio/index.vue';
+import BaseRadioGroup from '@/components/base-components/base-radio-group/index.vue';
+import BaseSelect from '@/components/base-components/base-select/index.vue';
+import BaseSwitch from '@/components/base-components/base-switch/index.vue';
+import BaseText from '@/components/base-components/base-text/index.vue';
+import BaseTextarea from '@/components/base-components/base-textarea/index.vue';
+// #endif
 import { getCamelToDashName } from '@/utils/common';
+
+// #ifdef MP-WEIXIN
+// 小程序平台直接导入组件，避免使用 defineAsyncComponent
+function installComponentWeixin() {
+  return {
+    BaseButton,
+    BaseCheckbox,
+    BaseContainer,
+    BaseImage,
+    BaseInput,
+    BaseInsComError,
+    BaseInsComLoading,
+    BaseRadio,
+    BaseRadioGroup,
+    BaseSelect,
+    BaseSwitch,
+    BaseText,
+    BaseTextarea,
+  };
+}
+// #endif
 
 /* 加载基础组件 */
 function installBaseComponent(componentName: string) {
@@ -61,10 +97,11 @@ function installBusinessComponent(componentName: string) {
 }
 
 export default function useInstallCom() {
-  const dynamicComponents: Record<string, any> = {};
+  let dynamicComponents: Record<string, any> = {};
   const loadFailedList: string[] = [];
 
   const installCom = (comList: string[]) => {
+    // #ifdef H5
     comList.forEach(componentName => {
       const formatName = getCamelToDashName(componentName);
       // 基础组件
@@ -98,6 +135,12 @@ export default function useInstallCom() {
         dynamicComponents[componentName] = formatName;
       }
     });
+    // #endif
+
+    // #ifdef MP-WEIXIN
+    console.log('~~ installComponentWeixin');
+    dynamicComponents = installComponentWeixin();
+    // #endif
 
     return {
       dynamicComponents,

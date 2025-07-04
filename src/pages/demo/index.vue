@@ -2,6 +2,7 @@
 import { demoConfig } from './config';
 
 import { ConfigPageContainer, createConfigPageProps } from '@/components/dynamic-renderer/config-page-container';
+import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 
 defineOptions({
   name: 'DemoPage',
@@ -20,11 +21,17 @@ const configProps = createConfigPageProps(
   }
 );
 
-console.log('~~ configProps', configProps);
+console.log('~~ DemoPage configProps', configProps);
 </script>
 
 <template>
+  <!-- #ifdef MP-WEIXIN -->
+  <DynamicRenderer :config="demoConfig" />
+  <!-- #endif -->
+
+  <!-- #ifdef H5 -->
   <ConfigPageContainer v-bind="configProps" />
+  <!-- #endif -->
 </template>
 
 <style lang="scss" scoped></style>

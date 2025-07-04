@@ -24,7 +24,9 @@ declare module 'vue' {
     ConfigPageContainer: typeof import('./../src/components/dynamic-renderer/config-page-container/index.vue')['default']
     DynamicRenderer: typeof import('./../src/components/dynamic-renderer/index.vue')['default']
     DynamicUiRenderer: typeof import('./../src/components/dynamic-renderer/dynamic-ui-renderer/index.vue')['default']
+    H5: typeof import('./../src/components/dynamic-renderer/dynamic-ui-renderer/h5.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Wx: typeof import('./../src/components/dynamic-renderer/dynamic-ui-renderer/wx.vue')['default']
   }
 }

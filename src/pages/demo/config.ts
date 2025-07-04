@@ -30,18 +30,10 @@ export const demoConfig: IComponentConfig[] = [
             },
             children: [
               {
-                id: 'layout_icon',
-                componentName: 'BaseText',
-                props: {
-                  content: '🏗️',
-                  class: 'text-6xl mb-4 block text-center',
-                },
-              },
-              {
                 id: 'layout_title',
                 componentName: 'BaseText',
                 props: {
-                  content: '布局展示',
+                  content: '🏗️ 布局展示',
                   class: 'text-2xl font-bold text-gray-800 mb-3 text-center',
                 },
               },
@@ -90,18 +82,10 @@ export const demoConfig: IComponentConfig[] = [
             },
             children: [
               {
-                id: 'form_icon',
-                componentName: 'BaseText',
-                props: {
-                  content: '📝',
-                  class: 'text-6xl mb-4 block text-center',
-                },
-              },
-              {
                 id: 'form_title',
                 componentName: 'BaseText',
                 props: {
-                  content: '表单演示',
+                  content: '📝 表单演示',
                   class: 'text-2xl font-bold text-gray-800 mb-3 text-center',
                 },
               },
@@ -160,18 +144,10 @@ export const demoConfig: IComponentConfig[] = [
             },
             children: [
               {
-                id: 'async_icon',
-                componentName: 'BaseText',
-                props: {
-                  content: '⚡',
-                  class: 'text-5xl mb-3 block text-center',
-                },
-              },
-              {
                 id: 'async_title',
                 componentName: 'BaseText',
                 props: {
-                  content: '异步事件',
+                  content: '⚡ 异步事件',
                   class: 'text-xl font-bold text-gray-800 mb-2 text-center',
                 },
               },
@@ -247,5 +223,12 @@ export const demoConfig: IComponentConfig[] = [
         ],
       },
     ],
+  },
+  {
+    id: 'button_test',
+    componentName: 'BaseButton',
+    props: {
+      text: '测试按钮',
+    },
   },
 ];
