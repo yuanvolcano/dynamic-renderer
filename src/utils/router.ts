@@ -183,7 +183,7 @@ export const buildUrl = (path: string, query?: Record<string, any>): string => {
  * 路由预设常量
  */
 export const ROUTES = {
-  HOME: '/pages/index/index',
+  HOME: '/pages/home/index',
   DEMO: '/pages/demo/demo',
 } as const;
 

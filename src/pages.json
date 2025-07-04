@@ -1,7 +1,7 @@
 {
   "pages": [
     {
-      "path": "pages/index/index",
+      "path": "pages/home/index",
       "style": {
         "navigationBarTitleText": "跨平台动态UI"
       }
@@ -39,7 +39,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/home/index",
         "iconPath": "static/tab_home.png",
         "selectedIconPath": "static/tab_home_active.png",
         "text": "首页"
@@ -57,7 +57,7 @@
     "list": [
       {
         "name": "首页",
-        "path": "pages/index/index",
+        "path": "pages/home/index",
         "query": ""
       }
     ]
