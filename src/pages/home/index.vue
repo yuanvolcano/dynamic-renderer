@@ -52,8 +52,7 @@ const loadDynamicUI = () => {
 <template>
   <view class="container">
     <view class="header">
-      <text class="title">跨平台动态UI</text>
-      <text class="subtitle">基于 Vue3 + uniapp 的跨平台解决方案</text>
+      <text class="title">基于 Vue3 + uniapp 的跨平台动态UI解决方案</text>
     </view>
 
     <view class="features">
@@ -64,11 +63,6 @@ const loadDynamicUI = () => {
           <text class="feature-desc">{{ feature.description }}</text>
         </view>
       </view>
-    </view>
-
-    <view class="actions">
-      <button class="action-btn primary" @click="navigateToDemo">查看组件演示</button>
-      <button class="action-btn default" @click="loadDynamicUI">加载动态UI</button>
     </view>
   </view>
 </template>

@@ -184,10 +184,11 @@ export const formDemoConfig: IComponentConfig[] = [
                         events: {
                           click: {
                             type: 'click',
-                            action: 'updateState',
+                            action: 'showToast',
                             payload: {
-                              path: 'verification.sent',
-                              value: true,
+                              title: '发送验证码成功',
+                              icon: 'success',
+                              duration: 2000,
                             },
                           },
                         },
@@ -449,14 +450,17 @@ export const formDemoConfig: IComponentConfig[] = [
                       class: 'mr-4',
                     },
                     events: {
-                      click: {
-                        type: 'click',
-                        action: 'updateState',
-                        payload: {
-                          path: 'form.submitted',
-                          value: true,
+                      click: [
+                        {
+                          type: 'click',
+                          action: 'showToast',
+                          payload: {
+                            title: '提交表单成功',
+                            icon: 'success',
+                            duration: 2000,
+                          },
                         },
-                      },
+                      ],
                     },
                   },
                   {

@@ -2,7 +2,7 @@
 import { computed, watch } from 'vue';
 
 import { IDynamicContextReturn } from '@/hooks/use-dynamic-context';
-import { IComponentConfig, TValueCondition } from '@/types/component';
+import { EEventExecutionMode, IComponentConfig, TValueCondition } from '@/types/component';
 import { parseModeValue } from '@/utils/parse-expression';
 
 defineOptions({
@@ -93,8 +93,8 @@ const modelValue = computed(() => {
   return props.dynamicContext.componentStates[props.config.id];
 });
 
-// 处理事件
-const handleEvent = (eventType: string, $event: any, config: IComponentConfig) => {
+// 处理事件 - 支持异步和顺序执行
+const handleEvent = async (eventType: string, $event: any, config: IComponentConfig) => {
   console.log('~~ handleEvent', eventType, $event, config);
   if (!config.events || !config.events[eventType]) {
     return;
@@ -104,9 +104,45 @@ const handleEvent = (eventType: string, $event: any, config: IComponentConfig) =
     ? (config.events[eventType] as any[])
     : [config.events[eventType]];
 
-  handlers.forEach(handler => {
-    props.dynamicContext.utils.handleEvent(handler, config.id);
-  });
+  // 检查是否需要顺序执行还是并行执行，使用枚举避免魔法字符串
+  const executionMode = config.eventExecutionMode || EEventExecutionMode.PARALLEL;
+
+  try {
+    if (executionMode === EEventExecutionMode.SEQUENTIAL) {
+      // 顺序执行：等待前一个处理器完成后再执行下一个
+      for (const handler of handlers) {
+        await executeEventHandler(handler, config.id);
+      }
+    } else {
+      // 并行执行：同时执行所有处理器（默认行为）
+      const promises = handlers.map(handler => executeEventHandler(handler, config.id));
+      await Promise.allSettled(promises); // 使用 allSettled 确保即使有错误也不会中断其他处理器
+    }
+  } catch (error) {
+    console.error(`事件处理器执行失败 [${eventType}]:`, error);
+  }
+};
+
+// 执行单个事件处理器
+const executeEventHandler = async (handler: any, componentId: string): Promise<void> => {
+  try {
+    // 如果处理器有延迟配置，先等待
+    if (handler.delay && handler.delay > 0) {
+      await new Promise(resolve => setTimeout(resolve, handler.delay));
+    }
+
+    // 调用具体的事件处理方法
+    // 注意：handleEvent 方法是同步的，但可能触发异步操作
+    props.dynamicContext.utils.handleEvent(handler, componentId);
+
+    // 如果处理器指定了额外的等待时间，在执行后等待
+    if (handler.waitAfter && handler.waitAfter > 0) {
+      await new Promise(resolve => setTimeout(resolve, handler.waitAfter));
+    }
+  } catch (error) {
+    console.error(`单个事件处理器执行失败:`, error, handler);
+    throw error; // 重新抛出错误以便上层处理
+  }
 };
 
 // 处理点击事件

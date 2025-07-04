@@ -80,8 +80,8 @@ export default function useInstallCom() {
           loadFailedList.push(componentName);
         }
       }
-      // 这里可以继续拓展 else-if，比如从三方 UI 库，或者自定义组件
-      else {
+      // 这里可以通过 else-if 继续拓展 ，比如从三方 UI 库，或者自定义组件
+      else if (formatName.startsWith('business-')) {
         // 业务组件
         const installResult = installBusinessComponent(componentName);
         if (!installResult) {
@@ -93,6 +93,9 @@ export default function useInstallCom() {
         } else {
           loadFailedList.push(componentName);
         }
+      } else {
+        // 使用 内置组件
+        dynamicComponents[componentName] = formatName;
       }
     });
 

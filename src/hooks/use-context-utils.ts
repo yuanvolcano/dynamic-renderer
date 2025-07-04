@@ -196,6 +196,7 @@ export function useContextUtils(
         break;
 
       case 'showToast':
+        console.log('~~ handleEvent showToast', handler.payload);
         uni.showToast(handler.payload);
         break;
 

@@ -7,7 +7,7 @@ interface IProps {
   disabled?: boolean;
 }
 
-const props = withDefaults(defineProps<IProps>(), {
+withDefaults(defineProps<IProps>(), {
   modelValue: '',
   placeholder: '请输入',
   disabled: false,
