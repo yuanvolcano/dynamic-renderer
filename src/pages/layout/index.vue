@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { layoutConfig as staticLayoutConfig } from './config';
 
-import { ConfigPageContainer, createConfigPageProps } from '@/pages/components';
+import { ConfigPageContainer, createConfigPageProps } from '@/components/dynamic-renderer/config-page-container';
 
 defineOptions({
   name: 'LayoutPage',

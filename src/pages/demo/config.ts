@@ -10,43 +10,15 @@ export const demoConfig: IComponentConfig[] = [
     id: 'main_container',
     componentName: 'BaseContainer',
     props: {
-      class: 'min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 p-8',
+      class: 'min-h-screen bg-blue-500 pb-20',
     },
     children: [
-      // 页面标题区域
-      {
-        id: 'header_section',
-        componentName: 'BaseContainer',
-        props: {
-          class: 'text-center mb-12 bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20',
-        },
-        children: [
-          {
-            id: 'page_title',
-            componentName: 'BaseText',
-            props: {
-              content: '🚀 组件演示',
-              class:
-                'text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4',
-            },
-          },
-          {
-            id: 'page_subtitle',
-            componentName: 'BaseText',
-            props: {
-              content: '探索动态UI渲染系统的强大功能',
-              class: 'text-xl text-gray-600 leading-relaxed',
-            },
-          },
-        ],
-      },
-
       // 主要功能卡片
       {
         id: 'main_features',
         componentName: 'BaseContainer',
         props: {
-          class: 'grid grid-cols-1 md:grid-cols-2 gap-6 mb-8',
+          class: 'px-4 py-6 mt-8',
         },
         children: [
           // 布局展示卡片
@@ -54,8 +26,7 @@ export const demoConfig: IComponentConfig[] = [
             id: 'layout_card',
             componentName: 'BaseContainer',
             props: {
-              class:
-                'group bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20',
+              class: 'bg-white rounded-lg p-6 mx-4 mb-6 shadow-lg',
             },
             children: [
               {
@@ -63,7 +34,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '🏗️',
-                  class: 'text-6xl mb-4 block text-center group-hover:scale-110 transition-transform duration-300',
+                  class: 'text-6xl mb-4 block text-center',
                 },
               },
               {
@@ -79,7 +50,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '展示复杂的布局结构设计和响应式组件排列',
-                  class: 'text-gray-600 text-center mb-6 leading-relaxed',
+                  class: 'text-gray-600 text-center mb-6',
                 },
               },
               {
@@ -87,8 +58,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseButton',
                 props: {
                   text: '立即体验',
-                  class:
-                    'w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105',
+                  class: 'w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg',
                 },
                 events: {
                   click: [
@@ -116,8 +86,7 @@ export const demoConfig: IComponentConfig[] = [
             id: 'form_card',
             componentName: 'BaseContainer',
             props: {
-              class:
-                'group bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-white/20',
+              class: 'bg-white rounded-lg p-6 mx-4 mb-6 shadow-lg',
             },
             children: [
               {
@@ -125,7 +94,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '📝',
-                  class: 'text-6xl mb-4 block text-center group-hover:scale-110 transition-transform duration-300',
+                  class: 'text-6xl mb-4 block text-center',
                 },
               },
               {
@@ -141,7 +110,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '动态表单组件展示、数据绑定和表单验证功能',
-                  class: 'text-gray-600 text-center mb-6 leading-relaxed',
+                  class: 'text-gray-600 text-center mb-6',
                 },
               },
               {
@@ -149,8 +118,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseButton',
                 props: {
                   text: '立即体验',
-                  class:
-                    'w-full bg-gradient-to-r from-pink-500 to-orange-400 hover:from-pink-600 hover:to-orange-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105',
+                  class: 'w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg',
                 },
                 events: {
                   click: [
@@ -180,7 +148,7 @@ export const demoConfig: IComponentConfig[] = [
         id: 'other_features',
         componentName: 'BaseContainer',
         props: {
-          class: 'grid grid-cols-1 md:grid-cols-2 gap-6 mb-8',
+          class: 'px-4 mb-8',
         },
         children: [
           // 异步事件卡片
@@ -188,8 +156,7 @@ export const demoConfig: IComponentConfig[] = [
             id: 'async_card',
             componentName: 'BaseContainer',
             props: {
-              class:
-                'group bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20',
+              class: 'bg-white rounded-lg p-6 mx-4 mb-6 shadow-lg',
             },
             children: [
               {
@@ -197,7 +164,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '⚡',
-                  class: 'text-5xl mb-3 block text-center group-hover:scale-110 transition-transform duration-300',
+                  class: 'text-5xl mb-3 block text-center',
                 },
               },
               {
@@ -205,7 +172,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '异步事件',
-                  class: 'text-xl font-semibold text-gray-800 mb-2 text-center',
+                  class: 'text-xl font-bold text-gray-800 mb-2 text-center',
                 },
               },
               {
@@ -213,7 +180,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '并行和顺序事件处理机制',
-                  class: 'text-gray-600 text-center mb-4 text-sm',
+                  class: 'text-gray-600 text-center mb-4',
                 },
               },
               {
@@ -221,8 +188,7 @@ export const demoConfig: IComponentConfig[] = [
                 componentName: 'BaseButton',
                 props: {
                   text: '立即体验',
-                  class:
-                    'w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-medium py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300',
+                  class: 'w-full bg-purple-500 text-white font-bold py-3 px-6 rounded-lg',
                 },
                 events: {
                   click: [
@@ -244,40 +210,39 @@ export const demoConfig: IComponentConfig[] = [
               },
             ],
           },
-        ],
-      },
-
-      // 底部信息区域
-      {
-        id: 'footer_info',
-        componentName: 'BaseContainer',
-        props: {
-          class: 'bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg text-center border border-white/20',
-        },
-        children: [
+          // 底部信息区域
           {
-            id: 'tech_title',
-            componentName: 'BaseText',
+            id: 'footer_info',
+            componentName: 'BaseContainer',
             props: {
-              content: '🔧 技术栈',
-              class: 'text-lg font-semibold text-gray-800 mb-3',
+              class: 'bg-white px-4 mb-12 rounded-lg p-6 shadow-lg text-center',
             },
-          },
-          {
-            id: 'tech_stack',
-            componentName: 'BaseText',
-            props: {
-              content: 'Vue3 + UniApp + TypeScript + TailwindCSS',
-              class: 'text-gray-600 mb-2',
-            },
-          },
-          {
-            id: 'platform_support',
-            componentName: 'BaseText',
-            props: {
-              content: '支持 H5 / 小程序 / App 多端运行',
-              class: 'text-sm text-gray-500',
-            },
+            children: [
+              {
+                id: 'tech_title',
+                componentName: 'BaseText',
+                props: {
+                  content: '🔧 技术栈',
+                  class: 'text-lg font-semibold text-gray-800 mb-3',
+                },
+              },
+              {
+                id: 'tech_stack',
+                componentName: 'BaseText',
+                props: {
+                  content: 'Vue3 + UniApp + TypeScript + UnoCSS',
+                  class: 'text-gray-600 mb-2',
+                },
+              },
+              {
+                id: 'platform_support',
+                componentName: 'BaseText',
+                props: {
+                  content: '支持 H5 / 小程序',
+                  class: 'text-sm text-gray-500',
+                },
+              },
+            ],
           },
         ],
       },

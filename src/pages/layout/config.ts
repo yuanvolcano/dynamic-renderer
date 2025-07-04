@@ -9,25 +9,15 @@ export const layoutConfig: IComponentConfig[] = [
     id: 'main_layout',
     componentName: 'BaseContainer',
     props: {
-      style: {
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#f5f5f5',
-      },
+      class: 'w-full h-full flex flex-col bg-gray-100',
     },
     children: [
-      // 红色头部区域
+      // 头部区域
       {
         id: 'header',
         componentName: 'BaseContainer',
         props: {
-          class: 'flex items-center justify-between px-8 py-4 bg-gray-200 text-white',
-          style: {
-            width: '100%',
-            height: '120rpx',
-          },
+          class: 'w-full h-[60px] flex items-center justify-between px-4 py-2 bg-gray-800 text-white',
         },
         children: [
           {
@@ -35,7 +25,7 @@ export const layoutConfig: IComponentConfig[] = [
             componentName: 'BaseText',
             props: {
               content: '配置化布局系统',
-              class: 'text-2xl font-bold',
+              class: 'text-2xl font-bold text-white',
             },
           },
         ],
@@ -45,16 +35,16 @@ export const layoutConfig: IComponentConfig[] = [
         id: 'main_body',
         componentName: 'BaseContainer',
         props: {
-          direction: 'row',
           class: 'flex flex-1 overflow-hidden',
+          direction: 'row',
         },
         children: [
-          // 蓝色侧边栏
+          // 侧边栏
           {
             id: 'sidebar',
             componentName: 'BaseContainer',
             props: {
-              class: 'w-48 bg-blue-600 text-white p-4',
+              class: 'w-[120px] bg-blue-600 text-white p-4',
             },
             children: [
               {
@@ -62,15 +52,14 @@ export const layoutConfig: IComponentConfig[] = [
                 componentName: 'BaseText',
                 props: {
                   content: '导航菜单',
-                  class: 'text-xl font-bold mb-6',
+                  class: 'text-lg font-bold mb-4 text-white',
                 },
               },
               {
                 id: 'menu_item_1',
                 componentName: 'BaseContainer',
                 props: {
-                  class:
-                    'p-4 mb-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition-colors',
+                  class: 'p-3 mb-2 bg-blue-700 rounded-lg cursor-pointer',
                 },
                 children: [
                   {
@@ -97,8 +86,7 @@ export const layoutConfig: IComponentConfig[] = [
                 id: 'menu_item_2',
                 componentName: 'BaseContainer',
                 props: {
-                  class:
-                    'p-4 mb-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition-colors',
+                  class: 'p-3 mb-2 bg-blue-700 rounded-lg cursor-pointer',
                 },
                 children: [
                   {
@@ -125,8 +113,7 @@ export const layoutConfig: IComponentConfig[] = [
                 id: 'menu_item_3',
                 componentName: 'BaseContainer',
                 props: {
-                  class:
-                    'p-4 mb-2 bg-white bg-opacity-10 rounded-lg cursor-pointer hover:bg-opacity-20 transition-colors',
+                  class: 'p-3 mb-2 bg-blue-700 rounded-lg cursor-pointer',
                 },
                 children: [
                   {
@@ -151,27 +138,43 @@ export const layoutConfig: IComponentConfig[] = [
               },
             ],
           },
-          // 灰色主内容区域
+          // 主内容区域
           {
             id: 'content',
             componentName: 'BaseContainer',
             props: {
-              class: 'flex-1 bg-white text-white p-8 overflow-auto',
+              class: 'flex-1 bg-white p-6 overflow-auto',
             },
             children: [
+              {
+                id: 'content_title',
+                componentName: 'BaseText',
+                props: {
+                  content: '欢迎使用配置化布局系统',
+                  class: 'text-2xl font-bold text-gray-800 mb-6',
+                },
+              },
               {
                 id: 'feature_list',
                 componentName: 'BaseContainer',
                 props: {
-                  class: 'bg-white bg-opacity-10 p-6 rounded-xl mb-6',
+                  class: 'bg-gray-50 p-4 rounded-lg mb-6',
                 },
                 children: [
+                  {
+                    id: 'feature_title',
+                    componentName: 'BaseText',
+                    props: {
+                      content: '系统特性',
+                      class: 'text-lg font-bold text-gray-800 mb-4',
+                    },
+                  },
                   {
                     id: 'feature_1',
                     componentName: 'BaseText',
                     props: {
                       content: '• 响应式布局设计',
-                      class: 'text-white text-base mb-3',
+                      class: 'text-gray-700 text-base mb-2',
                     },
                   },
                   {
@@ -179,7 +182,7 @@ export const layoutConfig: IComponentConfig[] = [
                     componentName: 'BaseText',
                     props: {
                       content: '• 动态状态绑定',
-                      class: 'text-white text-base mb-3',
+                      class: 'text-gray-700 text-base mb-2',
                     },
                   },
                   {
@@ -187,7 +190,7 @@ export const layoutConfig: IComponentConfig[] = [
                     componentName: 'BaseText',
                     props: {
                       content: '• 事件处理系统',
-                      class: 'text-white text-base mb-3',
+                      class: 'text-gray-700 text-base mb-2',
                     },
                   },
                   {
@@ -195,70 +198,96 @@ export const layoutConfig: IComponentConfig[] = [
                     componentName: 'BaseText',
                     props: {
                       content: '• 组件化架构',
-                      class: 'text-white text-base',
+                      class: 'text-gray-700 text-base',
                     },
                   },
                 ],
               },
               {
-                id: 'img_desc',
-                componentName: 'BaseText',
+                id: 'demo_section',
+                componentName: 'BaseContainer',
                 props: {
-                  content: 'Base Image 组件',
-                  class: 'text-white text-base',
+                  class: 'bg-white border border-gray-200 rounded-lg p-4 mb-6',
                 },
-              },
-              {
-                id: 'img_1',
-                componentName: 'BaseImage',
-                props: {
-                  class: 'w-[300rpx] h-[300rpx]',
-                  src: 'https://xmp.mobvista.com/static/media/gamehaus-image.81ac38f4784e749e2374.jpg',
-                },
-              },
-              {
-                id: 'input_desc',
-                componentName: 'BaseText',
-                props: {
-                  content: 'Base Input 组件',
-                  class: 'text-white text-base',
-                },
-              },
-              {
-                id: 'input_1',
-                componentName: 'BaseInput',
-                props: {
-                  placeholder: '请输入',
-                  class: 'w-[600rpx] h-[80rpx] mt-4',
-                },
-                defaultValue: '123',
-              },
-              {
-                id: 'text_1',
-                componentName: 'BaseText',
-                props: {
-                  class: 'text-2xl font-bold',
-                },
-                bindings: {
-                  content: {
-                    mode: EValueMode.PARSE,
-                    condition: '$.input_1',
+                children: [
+                  {
+                    id: 'demo_title',
+                    componentName: 'BaseText',
+                    props: {
+                      content: '组件演示',
+                      class: 'text-lg font-bold text-gray-800 mb-4',
+                    },
                   },
-                },
+                  {
+                    id: 'img_desc',
+                    componentName: 'BaseText',
+                    props: {
+                      content: 'Base Image 组件展示：',
+                      class: 'text-gray-700 text-base mb-2',
+                    },
+                  },
+                  {
+                    id: 'img_1',
+                    componentName: 'BaseImage',
+                    props: {
+                      class: 'w-60 h-60 rounded-lg mb-4',
+                      src: 'https://xmp.mobvista.com/static/media/gamehaus-image.81ac38f4784e749e2374.jpg',
+                    },
+                  },
+                  {
+                    id: 'input_desc',
+                    componentName: 'BaseText',
+                    props: {
+                      content: 'Base Input 组件展示：',
+                      class: 'text-gray-700 text-base mb-2',
+                    },
+                  },
+                  {
+                    id: 'input_1',
+                    componentName: 'BaseInput',
+                    props: {
+                      placeholder: '请输入内容',
+                      class: 'w-full h-12 px-3 py-2 border border-gray-300 rounded-lg mb-4',
+                    },
+                    defaultValue: '示例文本',
+                  },
+                  {
+                    id: 'input_display',
+                    componentName: 'BaseText',
+                    props: {
+                      class: 'text-lg font-medium text-blue-600 mb-4',
+                    },
+                    bindings: {
+                      content: {
+                        mode: EValueMode.PARSE,
+                        condition: '输入内容：$.input_1',
+                      },
+                    },
+                  },
+                ],
               },
               {
-                id: 'back_button',
-                componentName: 'BaseButton',
+                id: 'action_section',
+                componentName: 'BaseContainer',
                 props: {
-                  text: '返回演示页面',
-                  class: 'bg-blue-600 hover:bg-blue-700 text-white mt-4 py-4 px-8 rounded-lg text-lg transition-colors',
+                  class: 'flex flex-wrap gap-4',
                 },
-                events: {
-                  click: {
-                    type: 'click',
-                    action: 'navigateBack',
+                children: [
+                  {
+                    id: 'back_button',
+                    componentName: 'BaseButton',
+                    props: {
+                      text: '返回演示页面',
+                      class: 'bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium',
+                    },
+                    events: {
+                      click: {
+                        type: 'click',
+                        action: 'navigateBack',
+                      },
+                    },
                   },
-                },
+                ],
               },
             ],
           },

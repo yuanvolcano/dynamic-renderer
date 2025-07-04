@@ -1,6 +1,8 @@
 import { createSSRApp } from 'vue';
 
 import App from './App.vue';
+// 引入 UnoCSS 样式
+import 'uno.css';
 // 引入统一的样式入口文件
 import './styles/index.scss';
 // 引入全局指令

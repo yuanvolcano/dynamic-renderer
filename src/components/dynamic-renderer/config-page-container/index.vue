@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 
-import { IConfigPageProps } from '../types';
+import { IConfigPageProps } from './types';
 
 import { ConfigLoaderResponse, loadConfigFromLocal, loadConfigFromNetwork } from '@/api/config-loader';
 import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 import { IComponentConfig } from '@/types/component';
 import { isDevelopment } from '@/utils/common';
+
+defineOptions({
+  name: 'ConfigPageContainer',
+});
 
 const props = withDefaults(defineProps<IConfigPageProps>(), {
   remoteConfigUrl: '',
@@ -17,6 +21,8 @@ const props = withDefaults(defineProps<IConfigPageProps>(), {
   showLoadingSpinner: false,
   debugStyle: 'simple',
 });
+
+console.log('~~ ConfigPageContainer props', props);
 
 // 状态管理
 const loading = ref(false);
@@ -130,8 +136,11 @@ const clearError = () => {
   error.value = '';
 };
 
+console.log('~~ onMounted before', isDevelopmentBol);
+
 // 页面挂载时加载配置
 onMounted(async () => {
+  console.log('~~ onMounted', isDevelopmentBol);
   if (isDevelopmentBol) {
     console.log(`${props.pageId}: 开发模式 - 使用本地配置`);
     await useLocalConfig();

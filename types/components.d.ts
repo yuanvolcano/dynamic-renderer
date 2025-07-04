@@ -21,6 +21,7 @@ declare module 'vue' {
     BaseSwitch: typeof import('./../src/components/base-components/base-switch/index.vue')['default']
     BaseText: typeof import('./../src/components/base-components/base-text/index.vue')['default']
     BaseTextarea: typeof import('./../src/components/base-components/base-textarea/index.vue')['default']
+    ConfigPageContainer: typeof import('./../src/components/dynamic-renderer/config-page-container/index.vue')['default']
     DynamicRenderer: typeof import('./../src/components/dynamic-renderer/index.vue')['default']
     DynamicUiRenderer: typeof import('./../src/components/dynamic-renderer/dynamic-ui-renderer/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

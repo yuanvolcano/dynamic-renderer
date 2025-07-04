@@ -1,5 +1,5 @@
 // 组件导出
-export { default as ConfigPageContainer } from './config-page-container/index.vue';
+export { default as ConfigPageContainer } from './index.vue';
 
 // 类型导出
 export type { IConfigPageExposed, IConfigPageProps, IPagePreset } from './types';

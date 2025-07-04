@@ -6,12 +6,9 @@
 /* 1. 样式重置文件 - 最先引入，确保基础样式统一 */
 @use './reset.scss' as *;
 
-/* 2. Tailwind CSS - 在重置样式之后引入 */
-@use './tailwind.css' as *;
-
-/* 3. 自定义全局样式变量 */
+/* 2. 自定义全局样式变量 */
 :root {
-  /* 主题色彩 */
+  /* 主题色彩 - 与 UnoCSS 主题保持一致 */
   --color-primary: #3b82f6;
   --color-success: #10b981;
   --color-warning: #f59e0b;
@@ -32,9 +29,9 @@
   --border-radius-xl: 24rpx;
 
   /* 阴影 */
-  --shadow-sm: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
-  --shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 4rpx 6rpx rgba(0, 0, 0, 0.15);
+  --shadow-sm: 0 1rpx 2rpx rgb(0 0 0 / 5%);
+  --shadow: 0 1rpx 3rpx rgb(0 0 0 / 10%);
+  --shadow-lg: 0 4rpx 6rpx rgb(0 0 0 / 15%);
 
   /* 字体大小 */
   --font-size-xs: 24rpx;
@@ -64,99 +61,13 @@
   --window-bottom: 0px;
 }
 
-/* 4. 全局工具类补充 */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-base);
-}
-
+/* 3. 全局页面样式 */
 .page {
   min-height: 100vh;
   background-color: var(--color-background);
 }
 
-.card {
-  background: #fff;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--border-radius);
-  font-size: var(--font-size-base);
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all var(--duration-fast) ease;
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  &.btn-primary {
-    background-color: var(--color-primary);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      background-color: #2563eb;
-    }
-  }
-
-  &.btn-success {
-    background-color: var(--color-success);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      background-color: #059669;
-    }
-  }
-
-  &.btn-outline {
-    background-color: transparent;
-    border: 1rpx solid var(--color-border);
-    color: var(--color-text-primary);
-
-    &:hover:not(:disabled) {
-      background-color: var(--color-background);
-    }
-  }
-}
-
-.input {
-  display: block;
-  width: 100%;
-  padding: var(--spacing-sm);
-  border: 1rpx solid var(--color-border);
-  border-radius: var(--border-radius);
-  font-size: var(--font-size-base);
-  background-color: #fff;
-  transition: border-color var(--duration-fast) ease;
-
-  &:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 2rpx rgba(59, 130, 246, 0.1);
-  }
-
-  &::placeholder {
-    color: var(--color-text-disabled);
-  }
-
-  &:disabled {
-    background-color: var(--color-background);
-    color: var(--color-text-disabled);
-    cursor: not-allowed;
-  }
-}
-
-/* 5. 动画类 */
+/* 4. Vue 过渡动画 - UnoCSS 无法直接处理的 Vue 特定样式 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity var(--duration-base) ease;
@@ -187,8 +98,8 @@
   transform: scale(0.9);
 }
 
-/* 6. 响应式工具类扩展 */
-@media (max-width: 640px) {
+/* 5. 响应式工具类扩展 */
+@media (width <= 640px) {
   :root {
     --font-size-xs: 22rpx;
     --font-size-sm: 26rpx;
@@ -197,7 +108,7 @@
   }
 }
 
-/* 7. 暗色主题支持 */
+/* 6. 暗色主题支持 */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-text-primary: #f9fafb;
@@ -207,12 +118,31 @@
     --color-background: #111827;
   }
 
-  .card {
-    background: #1f2937;
-  }
-
-  .input {
-    background-color: #1f2937;
-    color: var(--color-text-primary);
+  /* 暗色主题下的特殊样式调整 */
+  .page {
+    background-color: var(--color-background);
   }
 }
+
+/* 7. 特殊平台适配样式 - UnoCSS 无法处理的平台特定样式 */
+
+/* #ifdef H5 */
+.h5-only {
+  /* H5 特有样式 */
+}
+
+/* #endif */
+
+/* #ifdef MP-WEIXIN */
+.mp-weixin-only {
+  /* 微信小程序特有样式 */
+}
+
+/* #endif */
+
+/* #ifdef APP-PLUS */
+.app-plus-only {
+  /* App 特有样式 */
+}
+
+/* #endif */
