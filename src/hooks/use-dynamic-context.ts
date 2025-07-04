@@ -1,6 +1,6 @@
 import { computed, reactive } from 'vue';
 
-import { createContextUtils, type IContextUtils } from './use-context-utils';
+import { useContextUtils, type IContextUtils } from './use-context-utils';
 
 import type { IComponentState, IEventBus } from '@/types/component';
 
@@ -69,7 +69,7 @@ export function useDynamicContext(): IDynamicContextReturn {
   const eventBus = useEventBus();
 
   // 创建统一的工具方法
-  const utils = createContextUtils(globalState, componentStates, eventBus);
+  const utils = useContextUtils(globalState, componentStates, eventBus);
 
   // 初始化全局事件处理器
   utils.setupGlobalEventHandlers();

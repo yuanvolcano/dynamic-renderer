@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 
 import type { IComponentConfig, IComponentState, IEventBus } from '@/types/component';
 
@@ -45,12 +45,16 @@ export interface IParseContext {
 /**
  * 创建上下文工具方法
  */
-export function createContextUtils(
+export function useContextUtils(
   globalState: any,
   componentStates: Record<string, IComponentState>,
   eventBus: IEventBus
 ): IContextUtils {
+  /** 当前 json 配置 */
   const configs = ref<IComponentConfig[]>([]);
+
+  // 用于跟踪已处理的组件 ID，确保全局唯一性
+  const componentIds = reactive(new Set<string>());
 
   // 设置组件状态
   const setComponentState = (componentId: string, state: any): void => {
@@ -207,6 +211,16 @@ export function createContextUtils(
   };
 
   const _processConfig = (item: IComponentConfig) => {
+    // 检查 ID 是否重复
+    if (componentIds.has(item.id)) {
+      const error = `❌ 配置错误: 发现重复的组件 ID "${item.id}"！每个组件的 ID 必须全局唯一。`;
+      console.error(error);
+      throw new Error(error);
+    }
+
+    // 记录已处理的 ID
+    componentIds.add(item.id);
+
     // 初始化组件状态
     if (item.defaultValue !== void 0) {
       setComponentState(item.id, item.defaultValue);
@@ -214,7 +228,9 @@ export function createContextUtils(
 
     // 处理子组件
     if (item.children) {
-      item.children.forEach(_processConfig);
+      item.children.forEach(child => {
+        _processConfig(child);
+      });
     }
   };
 
@@ -223,7 +239,11 @@ export function createContextUtils(
     const _configs = Array.isArray(config) ? config : [config];
     configs.value = _configs;
 
-    _configs.forEach(_processConfig);
+    // 清空并重新检查组件 ID
+    componentIds.clear();
+    _configs.forEach(item => {
+      _processConfig(item);
+    });
   };
 
   // 重置状态
@@ -231,7 +251,11 @@ export function createContextUtils(
     console.log('~~ resetState');
     const _configs = _config ? (Array.isArray(_config) ? _config : [_config]) : configs.value;
 
-    _configs.forEach(_processConfig);
+    // 清空并重新检查组件 ID
+    componentIds.clear();
+    _configs.forEach(item => {
+      _processConfig(item);
+    });
   };
 
   // 设置全局事件处理器
