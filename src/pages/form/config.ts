@@ -471,10 +471,10 @@ export const formDemoConfig: IComponentConfig[] = [
                     events: {
                       click: {
                         type: 'click',
-                        action: 'updateState',
+                        action: 'custom',
                         payload: {
-                          path: 'form.reset',
-                          value: true,
+                          mode: EValueMode.PARSE,
+                          condition: '$$$.context?.utils?.resetState?.()',
                         },
                       },
                     },

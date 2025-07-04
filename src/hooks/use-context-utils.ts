@@ -1,3 +1,5 @@
+import { ref } from 'vue';
+
 import type { IComponentConfig, IComponentState, IEventBus } from '@/types/component';
 
 import { parseModeValue } from '@/utils/parse-expression';
@@ -20,6 +22,9 @@ export interface IContextUtils {
   // 配置初始化
   init: (config: IComponentConfig[] | IComponentConfig) => void;
 
+  // 重置状态
+  resetState: (config: IComponentConfig[] | IComponentConfig) => void;
+
   // 实用方法
   setupGlobalEventHandlers: () => void;
   createParseContext: () => IParseContext;
@@ -30,6 +35,7 @@ export interface IParseContext {
   context: {
     globalState: any;
     componentStates: Record<string, IComponentState>;
+    configs: IComponentConfig[];
     eventBus: IEventBus;
     utils: IContextUtils;
   };
@@ -44,6 +50,8 @@ export function createContextUtils(
   componentStates: Record<string, IComponentState>,
   eventBus: IEventBus
 ): IContextUtils {
+  const configs = ref<IComponentConfig[]>([]);
+
   // 设置组件状态
   const setComponentState = (componentId: string, state: any): void => {
     componentStates[componentId] = state;
@@ -198,23 +206,32 @@ export function createContextUtils(
     }
   };
 
+  const _processConfig = (item: IComponentConfig) => {
+    // 初始化组件状态
+    if (item.defaultValue !== void 0) {
+      setComponentState(item.id, item.defaultValue);
+    }
+
+    // 处理子组件
+    if (item.children) {
+      item.children.forEach(_processConfig);
+    }
+  };
+
   // 初始化
   const init = (config: IComponentConfig[] | IComponentConfig): void => {
-    const configs = Array.isArray(config) ? config : [config];
+    const _configs = Array.isArray(config) ? config : [config];
+    configs.value = _configs;
 
-    const processConfig = (item: IComponentConfig) => {
-      // 初始化组件状态
-      if (item.defaultValue !== void 0) {
-        setComponentState(item.id, item.defaultValue);
-      }
+    _configs.forEach(_processConfig);
+  };
 
-      // 处理子组件
-      if (item.children) {
-        item.children.forEach(processConfig);
-      }
-    };
+  // 重置状态
+  const resetState = (_config?: IComponentConfig[] | IComponentConfig): void => {
+    console.log('~~ resetState');
+    const _configs = _config ? (Array.isArray(_config) ? _config : [_config]) : configs.value;
 
-    configs.forEach(processConfig);
+    _configs.forEach(_processConfig);
   };
 
   // 设置全局事件处理器
@@ -239,6 +256,7 @@ export function createContextUtils(
     isComponentVisible,
     handleVisibilityChange,
     init,
+    resetState,
     setupGlobalEventHandlers,
     createParseContext: () => createParseContext(),
   };
@@ -248,6 +266,7 @@ export function createContextUtils(
     context: {
       globalState,
       componentStates,
+      configs: configs.value,
       eventBus,
       utils,
     },
