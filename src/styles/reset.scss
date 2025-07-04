@@ -405,7 +405,6 @@ scroll-view::-webkit-scrollbar {
 
 /* 小程序滚动优化 */
 
-/* #ifdef MP */
 ::-webkit-scrollbar {
   display: none;
   width: 0;

@@ -123,26 +123,3 @@
     background-color: var(--color-background);
   }
 }
-
-/* 7. 特殊平台适配样式 - UnoCSS 无法处理的平台特定样式 */
-
-/* #ifdef H5 */
-.h5-only {
-  /* H5 特有样式 */
-}
-
-/* #endif */
-
-/* #ifdef MP-WEIXIN */
-.mp-weixin-only {
-  /* 微信小程序特有样式 */
-}
-
-/* #endif */
-
-/* #ifdef APP-PLUS */
-.app-plus-only {
-  /* App 特有样式 */
-}
-
-/* #endif */
