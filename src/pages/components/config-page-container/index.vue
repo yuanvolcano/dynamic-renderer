@@ -30,7 +30,7 @@ const isDevelopmentBol = isDevelopment();
 const pageStyle = computed(() => {
   const baseStyle: Record<string, any> = {
     width: '100%',
-    minHeight: '100vh',
+    height: '100%',
     position: 'relative',
   };
 
@@ -153,7 +153,7 @@ defineExpose({
 </script>
 
 <template>
-  <view :class="pageClass" :style="pageStyle">
+  <view class="config-page" :class="pageClass" :style="pageStyle">
     <!-- 加载状态 -->
     <view v-if="loading" class="loading-overlay">
       <view class="loading-content">
@@ -222,7 +222,7 @@ defineExpose({
 <style lang="scss" scoped>
 .config-page {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   position: relative;
 }
 

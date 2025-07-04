@@ -1,90 +1,30 @@
 <script setup lang="ts">
-const goToLayout = () => {
-  uni.navigateTo({
-    url: '/pages/layout/index',
-  });
-};
+import { demoConfig } from './config';
 
-const goToFormDemo = () => {
-  uni.navigateTo({ url: '/pages/form/index' });
-};
+import { ConfigPageContainer, createConfigPageProps } from '@/pages/components';
+
+defineOptions({
+  name: 'DemoPage',
+});
+
+// 使用工具函数创建配置
+const configProps = createConfigPageProps(
+  'default',
+  demoConfig,
+  undefined, // 暂无远程配置
+  {
+    pageTitle: '动态UI渲染系统演示',
+    loadingText: '系统初始化中...',
+    debugStyle: 'simple',
+    localLoadDelay: 100,
+  }
+);
+
+console.log('~~ configProps', configProps);
 </script>
 
 <template>
-  <view class="container">
-    <view class="actions">
-      <button class="action-btn layout" @click="goToLayout">布局展示</button>
-      <button class="action-btn form" @click="goToFormDemo">表单演示</button>
-    </view>
-  </view>
+  <ConfigPageContainer v-bind="configProps" />
 </template>
 
-<style lang="scss" scoped>
-.container {
-  padding: 40rpx;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 30rpx;
-}
-
-.title {
-  display: block;
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
-}
-
-.subtitle {
-  display: block;
-  font-size: 28rpx;
-  color: #666;
-}
-
-.state-display {
-  padding: 20rpx;
-  background-color: #e8f4fd;
-  border-radius: 8rpx;
-  margin-bottom: 20rpx;
-}
-
-.demo-section {
-  margin-bottom: 60rpx;
-}
-
-.actions {
-  display: flex;
-  gap: 20rpx;
-}
-
-.action-btn {
-  flex: 1;
-  font-size: 32rpx;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  border: none;
-
-  &.primary {
-    background-color: #007aff;
-    color: #fff;
-  }
-
-  &.default {
-    background-color: #f8f8f8;
-    color: #333;
-    border: 1rpx solid #e5e5e5;
-  }
-
-  &.layout {
-    background-color: #28a745;
-    color: #fff;
-  }
-
-  &.form {
-    background-color: #6c757d;
-    color: #fff;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

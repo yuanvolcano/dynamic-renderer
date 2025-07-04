@@ -23,6 +23,12 @@
       "style": {
         "navigationBarTitleText": "表单演示"
       }
+    },
+    {
+      "path": "pages/demo-async-events/index",
+      "style": {
+        "navigationBarTitleText": "异步事件测试"
+      }
     }
   ],
   "globalStyle": {

@@ -470,6 +470,7 @@ export const formDemoConfig: IComponentConfig[] = [
                       type: 'default',
                       size: 'medium',
                       text: '重置',
+                      class: 'mr-4',
                     },
                     events: {
                       click: {
@@ -479,6 +480,21 @@ export const formDemoConfig: IComponentConfig[] = [
                           mode: EValueMode.PARSE,
                           condition: '$$$.context?.utils?.resetState?.()',
                         },
+                      },
+                    },
+                  },
+                  {
+                    id: 'back_button',
+                    componentName: 'BaseButton',
+                    props: {
+                      type: 'default',
+                      size: 'medium',
+                      text: '返回',
+                    },
+                    events: {
+                      click: {
+                        type: 'click',
+                        action: 'navigateBack',
                       },
                     },
                   },

@@ -184,7 +184,9 @@ export const buildUrl = (path: string, query?: Record<string, any>): string => {
  */
 export const ROUTES = {
   HOME: '/pages/home/index',
-  DEMO: '/pages/demo/demo',
+  DEMO: '/pages/demo/index',
+  LAYOUT: '/pages/layout/index',
+  FORM: '/pages/form/index',
 } as const;
 
 /**

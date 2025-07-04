@@ -37,7 +37,7 @@ const features = ref<Feature[]>([
 
 const navigateToDemo = () => {
   uni.navigateTo({
-    url: '/pages/demo/demo',
+    url: '/pages/demo/index',
   });
 };
 
