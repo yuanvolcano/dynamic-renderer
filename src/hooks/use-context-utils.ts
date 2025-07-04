@@ -100,6 +100,7 @@ export function createContextUtils(
   };
 
   // 创建解析上下文 - 先声明，后面实现
+  // eslint-disable-next-line prefer-const
   let createParseContext: () => IParseContext;
 
   // 判断组件是否可见

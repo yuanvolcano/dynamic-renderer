@@ -79,8 +79,12 @@ export default [
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
+          // 忽略接口和类型定义中的未使用参数
+          ignoreRestSiblings: true,
         },
       ],
+      // 禁用传统的 no-unused-vars 规则，使用 TypeScript 版本
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       ...importOrder,
     },
@@ -119,6 +123,8 @@ export default [
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
+          // 忽略接口和类型定义中的未使用参数
+          ignoreRestSiblings: true,
         },
       ],
       '@typescript-eslint/no-explicit-any': 'off',
