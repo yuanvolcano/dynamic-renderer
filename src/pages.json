@@ -7,19 +7,19 @@
       }
     },
     {
-      "path": "pages/demo/demo",
+      "path": "pages/demo/index",
       "style": {
         "navigationBarTitleText": "组件演示"
       }
     },
     {
-      "path": "pages/layout/layout",
+      "path": "pages/layout/index",
       "style": {
         "navigationBarTitleText": "布局展示"
       }
     },
     {
-      "path": "pages/form-demo/form-demo",
+      "path": "pages/form/index",
       "style": {
         "navigationBarTitleText": "表单演示"
       }
@@ -45,7 +45,7 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/demo/demo",
+        "pagePath": "pages/demo/index",
         "iconPath": "static/tab_demo.png",
         "selectedIconPath": "static/tab_demo_active.png",
         "text": "演示"

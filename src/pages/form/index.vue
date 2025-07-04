@@ -112,7 +112,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <view class="form-demo-page">
+  <view class="form-page">
     <!-- 加载状态 -->
     <view v-if="loading" class="loading-overlay">
       <view class="loading-content">
@@ -174,7 +174,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.form-demo-page {
+.form-page {
   width: 100%;
   min-height: 100vh;
   position: relative;

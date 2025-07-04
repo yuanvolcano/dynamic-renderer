@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const goToLayout = () => {
   uni.navigateTo({
-    url: '/pages/layout/layout',
+    url: '/pages/layout/index',
   });
 };
 
 const goToFormDemo = () => {
-  uni.navigateTo({ url: '/pages/form-demo/form-demo' });
+  uni.navigateTo({ url: '/pages/form/index' });
 };
 </script>
 
@@ -14,7 +14,7 @@ const goToFormDemo = () => {
   <view class="container">
     <view class="actions">
       <button class="action-btn layout" @click="goToLayout">布局展示</button>
-      <button class="action-btn form-demo" @click="goToFormDemo">表单演示</button>
+      <button class="action-btn form" @click="goToFormDemo">表单演示</button>
     </view>
   </view>
 </template>
@@ -82,7 +82,7 @@ const goToFormDemo = () => {
     color: #fff;
   }
 
-  &.form-demo {
+  &.form {
     background-color: #6c757d;
     color: #fff;
   }
