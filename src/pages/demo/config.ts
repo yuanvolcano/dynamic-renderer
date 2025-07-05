@@ -135,6 +135,7 @@ export const demoConfig: IComponentConfig[] = [
           class: 'px-4 mb-8',
         },
         children: [
+          // #ifdef H5
           // 异步事件卡片
           {
             id: 'async_card',
@@ -186,6 +187,7 @@ export const demoConfig: IComponentConfig[] = [
               },
             ],
           },
+          // #endif
           // 底部信息区域
           {
             id: 'footer_info',
