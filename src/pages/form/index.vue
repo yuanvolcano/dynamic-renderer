@@ -2,6 +2,7 @@
 import { formDemoConfig as staticFormConfig } from './config';
 
 import { ConfigPageContainer, createConfigPageProps } from '@/components/dynamic-renderer/config-page-container';
+import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 
 defineOptions({
   name: 'FormPage',
@@ -16,5 +17,11 @@ const configProps = createConfigPageProps(
 </script>
 
 <template>
+  <!-- #ifdef MP-WEIXIN -->
+  <DynamicRenderer :config="staticFormConfig" />
+  <!-- #endif -->
+
+  <!-- #ifdef H5 -->
   <ConfigPageContainer v-bind="configProps" />
+  <!-- #endif -->
 </template>

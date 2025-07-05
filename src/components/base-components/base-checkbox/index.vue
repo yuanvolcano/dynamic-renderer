@@ -21,7 +21,8 @@ interface IProps {
   // 单个复选框模式下的值（仅在复选框组模式下使用）
   value?: string | number;
   // 样式相关
-  class?: string;
+  cssClass?: string;
+  cssStyle?: Record<string, any>;
   checkboxClass?: string;
   labelClass?: string;
 }
@@ -29,7 +30,8 @@ interface IProps {
 const props = withDefaults(defineProps<IProps>(), {
   label: '',
   disabled: false,
-  class: '',
+  cssClass: '',
+  cssStyle: () => ({}),
   checkboxClass: '',
   labelClass: '',
 });
@@ -40,6 +42,13 @@ const emits = defineEmits<{
 
 // 判断是否为复选框组模式
 const isGroupMode = computed(() => !!props.list && props.list.length > 0);
+
+// 计算容器样式
+const containerStyle = computed(() => {
+  return {
+    ...(props.cssStyle || {}),
+  };
+});
 
 // 单个复选框变化处理 - 使用 checkbox-group 包装单个复选框
 const handleSingleChange = (e: any) => {
@@ -70,18 +79,18 @@ const isSingleChecked = computed(() => {
 
 <template>
   <!-- 复选框组模式 -->
-  <view v-if="isGroupMode" :class="['base-checkbox-group', props.class]">
+  <view v-if="isGroupMode" :class="['base-checkbox-group', cssClass || '']" :style="containerStyle">
     <checkbox-group @change="handleGroupChange">
       <label
         v-for="item in list"
         :key="item.value"
-        :class="['base-checkbox-item', props.labelClass, { 'is-disabled': item.disabled || props.disabled }]"
+        :class="['base-checkbox-item', labelClass || '', { 'is-disabled': item.disabled || disabled }]"
       >
         <checkbox
           :value="item.value"
           :checked="isChecked(item.value)"
-          :disabled="item.disabled || props.disabled"
-          :class="props.checkboxClass"
+          :disabled="item.disabled || disabled"
+          :class="checkboxClass || ''"
         />
         <text class="checkbox-label">{{ item.label }}</text>
       </label>
@@ -89,12 +98,12 @@ const isSingleChecked = computed(() => {
   </view>
 
   <!-- 单个复选框模式 - 也使用 checkbox-group 包装以确保事件正确触发 -->
-  <view v-else :class="['base-checkbox-single', props.class, { 'is-disabled': props.disabled }]">
+  <view v-else :class="['base-checkbox-single', cssClass || '', { 'is-disabled': disabled }]" :style="containerStyle">
     <checkbox-group @change="handleSingleChange">
-      <label :class="['base-checkbox-item', props.labelClass]">
-        <checkbox value="checked" :checked="isSingleChecked" :disabled="props.disabled" :class="props.checkboxClass" />
-        <text v-if="props.label || $slots.default" :class="['checkbox-label', props.labelClass]">
-          <slot>{{ props.label }}</slot>
+      <label :class="['base-checkbox-item', labelClass || '']">
+        <checkbox value="checked" :checked="isSingleChecked" :disabled="disabled" :class="checkboxClass" />
+        <text v-if="label || $slots.default" :class="['checkbox-label', labelClass]">
+          <slot>{{ label }}</slot>
         </text>
       </label>
     </checkbox-group>

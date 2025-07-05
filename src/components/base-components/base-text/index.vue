@@ -32,11 +32,11 @@ const textStyle = computed(() => {
   };
 });
 
-console.log('~~ BaseText', props.text)
+console.log('~~ BaseText', props.content);
 </script>
 
 <template>
-  <text class="base-text" :class="cssClass" :style="textStyle">
+  <text class="base-text" :class="cssClass || ''" :style="textStyle">
     {{ content }}
   </text>
 </template>

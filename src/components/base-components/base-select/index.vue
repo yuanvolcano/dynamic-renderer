@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 defineOptions({ name: 'BaseSelect' });
 
@@ -12,10 +12,14 @@ interface IProps {
   modelValue: string | number;
   options: Option[];
   disabled?: boolean;
+  cssClass?: string;
+  cssStyle?: Record<string, any>;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   disabled: false,
+  cssClass: '',
+  cssStyle: () => ({}),
 });
 
 const emits = defineEmits(['update:modelValue']);
@@ -31,15 +35,36 @@ watch(
   { immediate: true }
 );
 
+const selectStyle = computed(() => {
+  return {
+    ...(props.cssStyle || {}),
+  };
+});
+
 const handleChange = (e: any) => {
   const idx = e.detail.value;
   emits('update:modelValue', props.options[idx]?.value);
 };
 </script>
+
 <template>
-  <picker range-key="label" :value="selectedIndex" :range="props.options" :disabled="disabled" @change="handleChange">
+  <picker
+    range-key="label"
+    :value="selectedIndex"
+    :range="options"
+    :disabled="disabled"
+    :class="['base-select', cssClass || '']"
+    :style="selectStyle"
+    @change="handleChange"
+  >
     <slot>
-      <view>{{ props.options[selectedIndex]?.label || '请选择' }}</view>
+      <view>{{ options[selectedIndex]?.label || '请选择' }}</view>
     </slot>
   </picker>
 </template>
+
+<style lang="scss" scoped>
+.base-select {
+  /* 基础样式可以在这里定义 */
+}
+</style>

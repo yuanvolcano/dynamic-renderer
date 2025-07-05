@@ -340,7 +340,6 @@ const isBaseTextarea = computed(() => {
     </BaseText>
   </template>
 
-  <!--
   <BaseCheckbox
     v-else-if="isBaseCheckbox"
     v-bind="buildComponentProps(config)"
@@ -570,7 +569,7 @@ const isBaseTextarea = computed(() => {
         :dynamic-context="dynamicContext"
       />
     </template>
-  </view> -->
+  </view>
 </template>
 
 <style lang="scss" scoped>

@@ -74,7 +74,7 @@ export const formDemoConfig: IComponentConfig[] = [
                 },
                 visibleOption: {
                   mode: EValueMode.PARSE,
-                  condition: '!!$.input_field?.length',
+                  condition: '$.input_field && !!$.input_field.length',
                 },
                 children: [
                   {
@@ -107,7 +107,7 @@ export const formDemoConfig: IComponentConfig[] = [
                 },
                 visibleOption: {
                   mode: EValueMode.PARSE,
-                  condition: '!!$.input_field?.length',
+                  condition: '$.input_field && !!$.input_field.length',
                 },
                 children: [
                   {
@@ -178,7 +178,7 @@ export const formDemoConfig: IComponentConfig[] = [
                         bindings: {
                           disabled: {
                             mode: EValueMode.PARSE,
-                            condition: '!($.email_field?.length && $.email_field.includes("@"))',
+                            condition: '!($.email_field &&$.email_field.length && $.email_field.includes("@"))',
                           },
                         },
                         events: {
@@ -207,7 +207,7 @@ export const formDemoConfig: IComponentConfig[] = [
                 },
                 visibleOption: {
                   mode: EValueMode.PARSE,
-                  condition: '!!$.email_field?.length && $.email_field.includes("@")',
+                  condition: '$.email_field && !!$.email_field.length && $.email_field.includes("@")',
                 },
                 children: [
                   {
@@ -413,7 +413,7 @@ export const formDemoConfig: IComponentConfig[] = [
                         bindings: {
                           disabled: {
                             mode: EValueMode.PARSE,
-                            condition: '!($.email_field?.length && $.email_field.includes("@"))',
+                            condition: '!($.email_field && $.email_field.length && $.email_field.includes("@"))',
                           },
                         },
                         defaultValue: true,
@@ -478,7 +478,7 @@ export const formDemoConfig: IComponentConfig[] = [
                         action: 'custom',
                         payload: {
                           mode: EValueMode.PARSE,
-                          condition: '$$$.context?.utils?.resetState?.()',
+                          condition: '$$$.context.utils.resetState()',
                         },
                       },
                     },

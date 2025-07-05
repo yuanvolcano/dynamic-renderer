@@ -2,6 +2,7 @@
 import { layoutConfig as staticLayoutConfig } from './config';
 
 import { ConfigPageContainer, createConfigPageProps } from '@/components/dynamic-renderer/config-page-container';
+import DynamicRenderer from '@/components/dynamic-renderer/index.vue';
 
 defineOptions({
   name: 'LayoutPage',
@@ -16,5 +17,11 @@ const configProps = createConfigPageProps(
 </script>
 
 <template>
+  <!-- #ifdef MP-WEIXIN -->
+  <DynamicRenderer :config="staticLayoutConfig" />
+  <!-- #endif -->
+
+  <!-- #ifdef H5 -->
   <ConfigPageContainer v-bind="configProps" />
+  <!-- #endif -->
 </template>

@@ -13,6 +13,8 @@ export interface IInputProps extends IBaseComponentProps {
   placeholder?: string;
   disabled?: boolean;
   type?: 'text' | 'number' | 'password';
+  cssClass?: string;
+  cssStyle?: Record<string, any>;
 }
 
 interface IProps extends IInputProps {
@@ -24,6 +26,8 @@ const props = withDefaults(defineProps<IProps>(), {
   placeholder: '请输入',
   disabled: false,
   type: 'text',
+  cssClass: '',
+  cssStyle: () => ({}),
 });
 
 const emits = defineEmits<{
@@ -44,6 +48,24 @@ const inputType = computed(() => {
   return typeMap[props.type] || 'text';
 });
 
+const inputStyle = computed(() => {
+  const baseStyle = {
+    boxSizing: 'border-box',
+    height: '80rpx',
+    padding: '20rpx',
+    borderRadius: '8rpx',
+    border: '2rpx solid #e5e5e5',
+    fontSize: '28rpx',
+    backgroundColor: props.disabled ? '#f5f5f5' : '#fff',
+    color: props.disabled ? '#999' : '#333',
+  };
+
+  return {
+    ...baseStyle,
+    ...(props.cssStyle || {}),
+  };
+});
+
 const handleValueUpdate = (event: any) => {
   console.log('handleValueUpdate', event, innerValue.value);
   emits('update:modelValue', event.target.value || event.detail.value);
@@ -61,8 +83,8 @@ const handleBlur = () => {
 <template>
   <input
     v-model="innerValue"
-    class="base-input"
-    :class="{ disabled: disabled }"
+    :class="['base-input', { disabled: disabled }, cssClass || '']"
+    :style="inputStyle"
     :placeholder="placeholder"
     :disabled="disabled"
     :type="inputType"
@@ -75,19 +97,10 @@ const handleBlur = () => {
 <style lang="scss" scoped>
 .base-input {
   display: block;
-  box-sizing: border-box;
   outline: none;
-  height: 80rpx;
-  padding: 20rpx;
-  border-radius: 8rpx;
-  border: 2rpx solid #e5e5e5;
-  font-size: 28rpx;
-  background-color: #fff;
-  color: #333;
 
   &.disabled {
-    background-color: #f5f5f5;
-    color: #999;
+    cursor: not-allowed;
   }
 
   &:focus {

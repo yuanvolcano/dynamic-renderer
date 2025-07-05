@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import pngNotPic from '@/static/images/not-pic.png';
 import { IBaseComponentProps } from '@/types/component';
@@ -13,12 +13,16 @@ interface IProps extends IBaseComponentProps {
   src: string;
   alt?: string;
   mode?: string;
+  cssClass?: string;
+  cssStyle?: Record<string, any>;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   src: '',
   alt: '',
   mode: 'aspectFit',
+  cssClass: '',
+  cssStyle: () => ({}),
 });
 
 const isLoading = ref(true);
@@ -29,6 +33,13 @@ const emits = defineEmits<{
   load: [];
   error: [];
 }>();
+
+const imageStyle = computed(() => {
+  return {
+    borderRadius: '4rpx',
+    ...(props.cssStyle || {}),
+  };
+});
 
 const handleLoad = () => {
   isLoading.value = false;
@@ -48,11 +59,18 @@ const handleError = (e: any) => {
 </script>
 
 <template>
-  <image class="base-image" :src="innerSrc" :mode="mode" @load="handleLoad" @error="handleError" />
+  <image
+    :class="['base-image', cssClass || '']"
+    :style="imageStyle"
+    :src="innerSrc"
+    :mode="mode"
+    @load="handleLoad"
+    @error="handleError"
+  />
 </template>
 
 <style lang="scss" scoped>
 .base-image {
-  border-radius: 4rpx;
+  /* 基本样式移至计算属性中 */
 }
 </style>

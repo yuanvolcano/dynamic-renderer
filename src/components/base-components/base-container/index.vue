@@ -43,7 +43,7 @@ const containerStyle = computed(() => {
   }
   if (props.cssStyle) {
     return {
-      ...props.cssStyle,
+      ...(props.cssStyle || {}),
     };
   }
 
@@ -57,7 +57,7 @@ console.log('~~ BaseContainer', {
 </script>
 
 <template>
-  <view :class="cssClass ? cssClass : ''" :style="containerStyle">
+  <view :class="cssClass || ''" :style="containerStyle">
     <slot></slot>
   </view>
 </template>
