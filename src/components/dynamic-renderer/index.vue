@@ -86,10 +86,19 @@ onBeforeMount(() => {
       width: '100%',
       backgroundColor: 'red',
     }"
-  /> -->
-  <!-- <view :style="{ height: '200px', width: '100%', backgroundColor: 'red' }">
-    <slot />
-  </view> -->
+  >
+    <BaseContainer
+      :css-style="{
+        height: '100px',
+        width: '100%',
+        backgroundColor: 'blue',
+      }"
+    >
+      <view>BaseContainer1</view>
+      <BaseText content="BaseContainer2" />
+    </BaseContainer>
+  </BaseContainer> -->
+
   <template v-for="config in normalizedConfigs" :key="config.id">
     <DynamicUIRenderer
       :config="config"

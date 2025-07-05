@@ -33,7 +33,6 @@ defineOptions({
   </component> -->
 
   <!-- #ifdef MP-WEIXIN -->
-  <view>wx</view>
   <DynamicUIRendererWX v-bind="$attrs" />
   <!-- #endif -->
 

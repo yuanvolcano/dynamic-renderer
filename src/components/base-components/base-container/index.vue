@@ -58,7 +58,7 @@ console.log('~~ BaseContainer', {
 
 <template>
   <view :class="cssClass ? cssClass : ''" :style="containerStyle">
-    <slot />
+    <slot></slot>
   </view>
 </template>
 

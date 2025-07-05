@@ -224,11 +224,4 @@ export const demoConfig: IComponentConfig[] = [
       },
     ],
   },
-  {
-    id: 'button_test',
-    componentName: 'BaseButton',
-    props: {
-      text: '测试按钮',
-    },
-  },
 ];

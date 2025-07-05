@@ -1,25 +1,17 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 
+import DynamicUIRenderer from './index.vue';
+
 import BaseButton from '@/components/base-components/base-button/index.vue';
-import BaseCheckbox from '@/components/base-components/base-checkbox/index.vue';
 import BaseContainer from '@/components/base-components/base-container/index.vue';
-import BaseImage from '@/components/base-components/base-image/index.vue';
-import BaseInput from '@/components/base-components/base-input/index.vue';
-import BaseInsComError from '@/components/base-components/base-ins-com-error/index.vue';
-import BaseInsComLoading from '@/components/base-components/base-ins-com-loading/index.vue';
-import BaseRadio from '@/components/base-components/base-radio/index.vue';
-import BaseRadioGroup from '@/components/base-components/base-radio-group/index.vue';
-import BaseSelect from '@/components/base-components/base-select/index.vue';
-import BaseSwitch from '@/components/base-components/base-switch/index.vue';
 import BaseText from '@/components/base-components/base-text/index.vue';
-import BaseTextarea from '@/components/base-components/base-textarea/index.vue';
 import { IDynamicContextReturn } from '@/hooks/use-dynamic-context';
 import { EEventExecutionMode, IComponentConfig, TValueCondition } from '@/types/component';
 import { parseModeValue } from '@/utils/parse-expression';
 
 defineOptions({
-  name: 'DynamicUIRendererWX',
+  name: 'DynamicUIRenderer',
 });
 
 interface IProps {
@@ -29,7 +21,7 @@ interface IProps {
 
 const props = defineProps<IProps>();
 
-console.log('~~ DynamicUIRendererWX');
+console.log('~~ DynamicUIRenderer');
 
 // 处理数据绑定
 const getBindingValue = (binding: TValueCondition) => {
@@ -199,12 +191,28 @@ watch(
   { immediate: false } // 不立即执行，避免初始化时误触发
 );
 
-const isBaseButton = computed(() => {
-  return props.config.componentName === 'BaseButton';
+const hasChildren = computed(() => {
+  return props.config.children && props.config.children.length > 0;
 });
 
-const isBaseCheckbox = computed(() => {
-  return props.config.componentName === 'BaseCheckbox';
+const isBaseButton = computed(() => {
+  const result = props.config.componentName === 'BaseButton';
+  console.log('~~ isBaseButton', {
+    isBaseButton: result,
+    isVisible: isVisible.value,
+    config: props.config,
+  });
+  return result;
+});
+
+const isBaseText = computed(() => {
+  const result = props.config.componentName === 'BaseText';
+  console.log('~~ isBaseText', {
+    isBaseText: result,
+    isVisible: isVisible.value,
+    config: props.config,
+  });
+  return result;
 });
 
 const isBaseContainer = computed(() => {
@@ -212,6 +220,7 @@ const isBaseContainer = computed(() => {
   console.log('~~ isBaseContainer', {
     isBaseContainer: result,
     isVisible: isVisible.value,
+    config: props.config,
   });
   return result;
 });
@@ -222,6 +231,10 @@ const isBaseImage = computed(() => {
 
 const isBaseInput = computed(() => {
   return props.config.componentName === 'BaseInput';
+});
+
+const isBaseCheckbox = computed(() => {
+  return props.config.componentName === 'BaseCheckbox';
 });
 
 const isBaseInsComError = computed(() => {
@@ -248,10 +261,6 @@ const isBaseSwitch = computed(() => {
   return props.config.componentName === 'BaseSwitch';
 });
 
-const isBaseText = computed(() => {
-  return props.config.componentName === 'BaseText';
-});
-
 const isBaseTextarea = computed(() => {
   return props.config.componentName === 'BaseTextarea';
 });
@@ -275,40 +284,63 @@ const isBaseTextarea = computed(() => {
       @blur="handleEvent('blur', $event, config)"
     >
       <!-- 递归渲染子组件 -->
-      <template v-if="config.children && config.children.length > 0">
-        <DynamicUIRendererWX
+      <view v-if="hasChildren">
+        <DynamicUIRenderer
           v-for="child in config.children"
           :key="child.id"
           :config="child"
           :dynamic-context="dynamicContext"
         />
-      </template>
+      </view>
     </BaseContainer>
   </template>
 
-  <!-- 基础组件条件渲染 -->
-  <BaseButton
-    v-else-if="isBaseButton"
-    v-bind="buildComponentProps(config)"
-    :css-style="mergedStyle"
-    :css-class="mergedClass"
-    @click="handleClick($event, config)"
-    @update:model-value="handleUpdateModelValue($event, config)"
-    @change="handleEvent('change', $event, config)"
-    @focus="handleEvent('focus', $event, config)"
-    @blur="handleEvent('blur', $event, config)"
-  >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
-        v-for="child in config.children"
-        :key="child.id"
-        :config="child"
-        :dynamic-context="dynamicContext"
-      />
-    </template>
-  </BaseButton>
+  <template v-else-if="isBaseButton">
+    <BaseButton
+      v-bind="buildComponentProps(config)"
+      :css-style="mergedStyle"
+      :css-class="mergedClass"
+      @click="handleClick($event, config)"
+      @update:model-value="handleUpdateModelValue($event, config)"
+      @change="handleEvent('change', $event, config)"
+      @focus="handleEvent('focus', $event, config)"
+      @blur="handleEvent('blur', $event, config)"
+    >
+      <!-- 递归渲染子组件 -->
+      <view v-if="hasChildren">
+        <DynamicUIRenderer
+          v-for="child in config.children"
+          :key="child.id"
+          :config="child"
+          :dynamic-context="dynamicContext"
+        />
+      </view>
+    </BaseButton>
+  </template>
 
+  <template v-else-if="isBaseText">
+    <BaseText
+      v-bind="buildComponentProps(config)"
+      :css-style="mergedStyle"
+      :css-class="mergedClass"
+      @click="handleClick($event, config)"
+      @update:model-value="handleUpdateModelValue($event, config)"
+      @change="handleEvent('change', $event, config)"
+      @focus="handleEvent('focus', $event, config)"
+      @blur="handleEvent('blur', $event, config)"
+    >
+      <view v-if="hasChildren">
+        <DynamicUIRenderer
+          v-for="child in config.children"
+          :key="child.id"
+          :config="child"
+          :dynamic-context="dynamicContext"
+        />
+      </view>
+    </BaseText>
+  </template>
+
+  <!--
   <BaseCheckbox
     v-else-if="isBaseCheckbox"
     v-bind="buildComponentProps(config)"
@@ -321,9 +353,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -344,9 +375,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -367,9 +397,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -390,9 +419,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -413,9 +441,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -436,9 +463,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -459,9 +485,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -482,9 +507,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -505,9 +529,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -515,28 +538,6 @@ const isBaseTextarea = computed(() => {
       />
     </template>
   </BaseSwitch>
-
-  <BaseText
-    v-else-if="isBaseText"
-    v-bind="buildComponentProps(config)"
-    :css-style="mergedStyle"
-    :css-class="mergedClass"
-    @click="handleClick($event, config)"
-    @update:model-value="handleUpdateModelValue($event, config)"
-    @change="handleEvent('change', $event, config)"
-    @focus="handleEvent('focus', $event, config)"
-    @blur="handleEvent('blur', $event, config)"
-  >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
-        v-for="child in config.children"
-        :key="child.id"
-        :config="child"
-        :dynamic-context="dynamicContext"
-      />
-    </template>
-  </BaseText>
 
   <BaseTextarea
     v-else-if="isBaseTextarea"
@@ -549,9 +550,8 @@ const isBaseTextarea = computed(() => {
     @focus="handleEvent('focus', $event, config)"
     @blur="handleEvent('blur', $event, config)"
   >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
@@ -560,19 +560,17 @@ const isBaseTextarea = computed(() => {
     </template>
   </BaseTextarea>
 
-  <!-- 如果不是已知的基础组件，则渲染为普通文本或者使用内置组件 -->
   <view v-else :css-style="mergedStyle" :css-class="mergedClass">
     <text>未知组件: {{ config.componentName }}</text>
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
+    <template v-if="hasChildren">
+      <DynamicUIRenderer
         v-for="child in config.children"
         :key="child.id"
         :config="child"
         :dynamic-context="dynamicContext"
       />
     </template>
-  </view>
+  </view> -->
 </template>
 
 <style lang="scss" scoped>
