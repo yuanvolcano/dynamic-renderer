@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, CSSProperties } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
@@ -13,6 +13,8 @@ export interface IProps extends IBaseComponentProps {
   loading?: boolean;
   type?: 'primary' | 'default' | 'warning' | 'success' | 'danger';
   size?: 'mini' | 'small' | 'medium' | 'large';
+  cssClass?: string;
+  cssStyle?: CSSProperties;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -21,7 +23,11 @@ const props = withDefaults(defineProps<IProps>(), {
   disabled: false,
   loading: false,
   type: 'default',
+  cssClass: '',
+  cssStyle: () => ({}),
 });
+
+console.log('~~ BaseButton', props);
 
 const emits = defineEmits<{
   click: [event: any];
@@ -98,7 +104,7 @@ const buttonStyle = computed(() => {
     cursor: props.disabled ? 'not-allowed' : 'pointer',
     opacity: props.disabled ? 0.6 : 1,
     transition: 'all 0.3s ease',
-    ...props.style,
+    ...props.cssStyle,
   };
 });
 
@@ -122,10 +128,22 @@ const handleClick = (event: any) => {
     emits('click', event);
   }
 };
+
+console.log('~~ BaseButton buttonClass', {
+  buttonClass: buttonClass.value,
+  cssClass: props.cssClass,
+  buttonStyle: buttonStyle.value,
+  cssStyle: props.cssStyle,
+});
 </script>
 
 <template>
-  <button :class="buttonClass" :style="buttonStyle" :disabled="disabled || loading" @click="handleClick">
+  <button
+    :class="[buttonClass, cssClass ? cssClass : '']"
+    :style="buttonStyle"
+    :disabled="disabled || loading"
+    @click="handleClick"
+  >
     <view v-if="loading" class="button-loading">
       <text class="loading-text">加载中...</text>
     </view>

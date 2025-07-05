@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, CSSProperties } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
@@ -12,25 +12,29 @@ export interface IProps extends IBaseComponentProps {
   content: string;
   fontSize?: string;
   color?: string;
+  cssClass?: string;
+  cssStyle?: CSSProperties;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
   content: '',
   fontSize: '28rpx',
   color: '#333',
+  cssClass: '',
+  cssStyle: () => ({}),
 });
 
 const textStyle = computed(() => {
   return {
     fontSize: props.fontSize,
     color: props.color,
-    ...props.style,
+    ...props.cssStyle,
   };
 });
 </script>
 
 <template>
-  <text class="base-text" :style="textStyle">
+  <text class="base-text" :class="cssClass" :style="textStyle">
     {{ content }}
   </text>
 </template>

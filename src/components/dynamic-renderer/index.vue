@@ -78,6 +78,18 @@ onBeforeMount(() => {
 </script>
 
 <template>
+  <!-- #ifdef MP-WEIXIN -->
+  <!-- <BaseContainer
+    :use-flex="false"
+    :css-style="{
+      height: '200px',
+      width: '100%',
+      backgroundColor: 'red',
+    }"
+  /> -->
+  <!-- <view :style="{ height: '200px', width: '100%', backgroundColor: 'red' }">
+    <slot />
+  </view> -->
   <template v-for="config in normalizedConfigs" :key="config.id">
     <DynamicUIRenderer
       :config="config"
@@ -86,6 +98,18 @@ onBeforeMount(() => {
       :dynamic-context="dynamicContext"
     />
   </template>
+  <!-- #endif -->
+
+  <!-- #ifdef H5 -->
+  <template v-for="config in normalizedConfigs" :key="config.id">
+    <DynamicUIRenderer
+      :config="config"
+      :component-map="componentMap"
+      :getCurrentComponent="getCurrentComponent"
+      :dynamic-context="dynamicContext"
+    />
+  </template>
+  <!-- #endif -->
 </template>
 
 <style lang="scss" scoped>

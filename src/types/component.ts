@@ -1,4 +1,6 @@
 // 导入枚举常量
+import { CSSProperties } from 'vue';
+
 import { EEventExecutionMode, EValueMode, type TEventExecutionMode } from '@/constants/enums';
 
 // 组件配置接口
@@ -27,7 +29,8 @@ export interface IComponentConfig {
 
 // 基础组件属性接口
 export interface IBaseComponentProps {
-  style?: Record<string, any>;
+  cssClass?: string;
+  cssStyle?: CSSProperties;
   onClick?: (_event: any) => void;
 }
 

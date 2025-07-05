@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 
-import {
-  BaseButton,
-  BaseCheckbox,
-  BaseContainer,
-  BaseImage,
-  BaseInput,
-  BaseInsComError,
-  BaseInsComLoading,
-  BaseRadio,
-  BaseRadioGroup,
-  BaseSelect,
-  BaseSwitch,
-  BaseText,
-  BaseTextarea,
-} from '@/components/base-components';
+import BaseButton from '@/components/base-components/base-button/index.vue';
+import BaseCheckbox from '@/components/base-components/base-checkbox/index.vue';
+import BaseContainer from '@/components/base-components/base-container/index.vue';
+import BaseImage from '@/components/base-components/base-image/index.vue';
+import BaseInput from '@/components/base-components/base-input/index.vue';
+import BaseInsComError from '@/components/base-components/base-ins-com-error/index.vue';
+import BaseInsComLoading from '@/components/base-components/base-ins-com-loading/index.vue';
+import BaseRadio from '@/components/base-components/base-radio/index.vue';
+import BaseRadioGroup from '@/components/base-components/base-radio-group/index.vue';
+import BaseSelect from '@/components/base-components/base-select/index.vue';
+import BaseSwitch from '@/components/base-components/base-switch/index.vue';
+import BaseText from '@/components/base-components/base-text/index.vue';
+import BaseTextarea from '@/components/base-components/base-textarea/index.vue';
 import { IDynamicContextReturn } from '@/hooks/use-dynamic-context';
 import { EEventExecutionMode, IComponentConfig, TValueCondition } from '@/types/component';
 import { parseModeValue } from '@/utils/parse-expression';
@@ -26,7 +24,6 @@ defineOptions({
 
 interface IProps {
   config: IComponentConfig;
-  getCurrentComponent: (componentName: string) => string;
   dynamicContext: IDynamicContextReturn;
 }
 
@@ -181,6 +178,27 @@ const handleUpdateModelValue = (event: any, config: IComponentConfig) => {
   );
 };
 
+// 判断组件是否可见
+const isVisible = computed(() => {
+  if (props.config.visibleOption === void 0) {
+    return true;
+  }
+
+  return props.dynamicContext.utils.isComponentVisible(props.config);
+});
+
+// 监听显隐变化，处理默认值重置
+watch(
+  () => isVisible.value,
+  (newVisible: boolean, oldVisible: boolean) => {
+    // 只有从显示变为隐藏时才处理默认值重置
+    if (oldVisible === true && newVisible === false) {
+      props.dynamicContext.utils.handleVisibilityChange(props.config, newVisible);
+    }
+  },
+  { immediate: false } // 不立即执行，避免初始化时误触发
+);
+
 const isBaseButton = computed(() => {
   return props.config.componentName === 'BaseButton';
 });
@@ -191,7 +209,10 @@ const isBaseCheckbox = computed(() => {
 
 const isBaseContainer = computed(() => {
   const result = props.config.componentName === 'BaseContainer';
-  console.log('~~ isBaseContainer', result);
+  console.log('~~ isBaseContainer', {
+    isBaseContainer: result,
+    isVisible: isVisible.value,
+  });
   return result;
 });
 
@@ -234,27 +255,6 @@ const isBaseText = computed(() => {
 const isBaseTextarea = computed(() => {
   return props.config.componentName === 'BaseTextarea';
 });
-
-// 判断组件是否可见
-const isVisible = computed(() => {
-  if (props.config.visibleOption === void 0) {
-    return true;
-  }
-
-  return props.dynamicContext.utils.isComponentVisible(props.config);
-});
-
-// 监听显隐变化，处理默认值重置
-watch(
-  () => isVisible.value,
-  (newVisible: boolean, oldVisible: boolean) => {
-    // 只有从显示变为隐藏时才处理默认值重置
-    if (oldVisible === true && newVisible === false) {
-      props.dynamicContext.utils.handleVisibilityChange(props.config, newVisible);
-    }
-  },
-  { immediate: false } // 不立即执行，避免初始化时误触发
-);
 </script>
 
 <template>
@@ -262,34 +262,36 @@ watch(
   <!-- 如果组件不可见，返回空 -->
   <template v-if="!isVisible"></template>
 
-  <BaseContainer
-    v-else-if="isBaseContainer"
-    v-bind="buildComponentProps(config)"
-    :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
-    @click="handleClick($event, config)"
-    @update:model-value="handleUpdateModelValue($event, config)"
-    @change="handleEvent('change', $event, config)"
-    @focus="handleEvent('focus', $event, config)"
-    @blur="handleEvent('blur', $event, config)"
-  >
-    <!-- 递归渲染子组件 -->
-    <template v-if="config.children && config.children.length > 0">
-      <DynamicUIRendererWX
-        v-for="child in config.children"
-        :key="child.id"
-        :config="child"
-        :get-current-component="getCurrentComponent"
-        :dynamic-context="dynamicContext"
-      />
-    </template>
-  </BaseContainer>
+  <template v-else-if="isBaseContainer">
+    <BaseContainer
+      v-bind="buildComponentProps(config)"
+      :modelValue="modelValue"
+      :css-style="mergedStyle"
+      :css-class="mergedClass"
+      @click="handleClick($event, config)"
+      @update:model-value="handleUpdateModelValue($event, config)"
+      @change="handleEvent('change', $event, config)"
+      @focus="handleEvent('focus', $event, config)"
+      @blur="handleEvent('blur', $event, config)"
+    >
+      <!-- 递归渲染子组件 -->
+      <template v-if="config.children && config.children.length > 0">
+        <DynamicUIRendererWX
+          v-for="child in config.children"
+          :key="child.id"
+          :config="child"
+          :dynamic-context="dynamicContext"
+        />
+      </template>
+    </BaseContainer>
+  </template>
 
   <!-- 基础组件条件渲染 -->
   <BaseButton
     v-else-if="isBaseButton"
     v-bind="buildComponentProps(config)"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -302,7 +304,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -312,7 +313,7 @@ watch(
     v-else-if="isBaseCheckbox"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
+    :css-style="mergedStyle"
     :class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
@@ -326,7 +327,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -336,8 +336,8 @@ watch(
     v-else-if="isBaseImage"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -350,7 +350,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -360,8 +359,8 @@ watch(
     v-else-if="isBaseInput"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -374,7 +373,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -384,8 +382,8 @@ watch(
     v-else-if="isBaseInsComError"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -398,7 +396,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -408,8 +405,8 @@ watch(
     v-else-if="isBaseInsComLoading"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -422,7 +419,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -432,8 +428,8 @@ watch(
     v-else-if="isBaseRadio"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -446,7 +442,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -456,6 +451,8 @@ watch(
     v-else-if="isBaseRadioGroup"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -468,7 +465,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -478,8 +474,8 @@ watch(
     v-else-if="isBaseSelect"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -492,7 +488,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -502,8 +497,8 @@ watch(
     v-else-if="isBaseSwitch"
     v-bind="buildComponentProps(config)"
     :modelValue="modelValue"
-    :style="mergedStyle"
-    :class="mergedClass"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -516,7 +511,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -525,6 +519,8 @@ watch(
   <BaseText
     v-else-if="isBaseText"
     v-bind="buildComponentProps(config)"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -537,7 +533,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
@@ -546,6 +541,8 @@ watch(
   <BaseTextarea
     v-else-if="isBaseTextarea"
     v-bind="buildComponentProps(config)"
+    :css-style="mergedStyle"
+    :css-class="mergedClass"
     @click="handleClick($event, config)"
     @update:model-value="handleUpdateModelValue($event, config)"
     @change="handleEvent('change', $event, config)"
@@ -558,14 +555,13 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>
   </BaseTextarea>
 
   <!-- 如果不是已知的基础组件，则渲染为普通文本或者使用内置组件 -->
-  <view v-else class="unknown-component">
+  <view v-else :css-style="mergedStyle" :css-class="mergedClass">
     <text>未知组件: {{ config.componentName }}</text>
     <!-- 递归渲染子组件 -->
     <template v-if="config.children && config.children.length > 0">
@@ -573,7 +569,6 @@ watch(
         v-for="child in config.children"
         :key="child.id"
         :config="child"
-        :get-current-component="getCurrentComponent"
         :dynamic-context="dynamicContext"
       />
     </template>

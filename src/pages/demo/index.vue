@@ -20,8 +20,6 @@ const configProps = createConfigPageProps(
     localLoadDelay: 100,
   }
 );
-
-console.log('~~ DemoPage configProps', configProps);
 </script>
 
 <template>

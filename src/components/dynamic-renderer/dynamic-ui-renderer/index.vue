@@ -35,7 +35,6 @@ defineOptions({
   <!-- #ifdef MP-WEIXIN -->
   <view>wx</view>
   <DynamicUIRendererWX v-bind="$attrs" />
-  <view>wx end</view>
   <!-- #endif -->
 
   <!-- #ifdef H5 -->

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, CSSProperties } from 'vue';
 
 import { IBaseComponentProps } from '@/types/component';
 
@@ -13,6 +13,8 @@ export interface IProps extends IBaseComponentProps {
   direction?: 'row' | 'column';
   justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around';
   align?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
+  cssClass?: string;
+  cssStyle?: CSSProperties;
 }
 
 const props = withDefaults(defineProps<IProps>(), {
@@ -20,36 +22,44 @@ const props = withDefaults(defineProps<IProps>(), {
   direction: 'column',
   justify: 'flex-start',
   align: 'stretch',
+  cssClass: '',
+  cssStyle: () => ({}),
 });
 
 const containerStyle = computed(() => {
+  console.log('~~ BaseContainer containerStyle', {
+    useFlex: props.useFlex,
+    cssStyle: props.cssStyle,
+    cssClass: props.cssClass,
+  });
   if (props.useFlex) {
     return {
       display: 'flex',
       flexDirection: props.direction,
       justifyContent: props.justify,
       alignItems: props.align,
-      ...props.style,
+      ...props.cssStyle,
     };
   }
-  if (props.style) {
+  if (props.cssStyle) {
     return {
-      ...props.style,
+      ...props.cssStyle,
     };
   }
 
   return {};
 });
+
+console.log('~~ BaseContainer', {
+  containerStyle: containerStyle.value,
+  cssClass: props.cssClass,
+});
 </script>
 
 <template>
-  <view class="base-container" :style="containerStyle">
+  <view :class="cssClass ? cssClass : ''" :style="containerStyle">
     <slot />
   </view>
 </template>
 
-<style lang="scss" scoped>
-.base-container {
-  box-sizing: border-box;
-}
-</style>
+<style lang="scss" scoped></style>
