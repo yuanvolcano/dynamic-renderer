@@ -1,4 +1,4 @@
-import { EValueMode, IComponentConfig } from '@/types/component';
+import { IComponentConfig } from '@/types/component';
 
 /**
  * 布局页面的配置对象
@@ -35,8 +35,14 @@ export const layoutConfig: IComponentConfig[] = [
         id: 'main_body',
         componentName: 'BaseContainer',
         props: {
+          // #ifdef H5
           class: 'flex flex-1 overflow-hidden',
           direction: 'row',
+          // #endif
+          // #ifdef MP-WEIXIN
+          class: 'flex',
+          direction: 'column',
+          // #endif
         },
         children: [
           // 侧边栏
@@ -44,7 +50,12 @@ export const layoutConfig: IComponentConfig[] = [
             id: 'sidebar',
             componentName: 'BaseContainer',
             props: {
-              class: 'w-[120px] bg-blue-600 text-white p-4',
+              // #ifdef H5
+              class: 'w-[200px] bg-blue-600 text-white p-4',
+              // #endif
+              // #ifdef MP-WEIXIN
+              class: 'w-full bg-blue-600 text-white p-4',
+              // #endif
             },
             children: [
               {
@@ -250,19 +261,6 @@ export const layoutConfig: IComponentConfig[] = [
                       class: 'w-full h-12 px-3 py-2 border border-gray-300 rounded-lg mb-4',
                     },
                     defaultValue: '示例文本',
-                  },
-                  {
-                    id: 'input_display',
-                    componentName: 'BaseText',
-                    props: {
-                      class: 'text-lg font-medium text-blue-600 mb-4',
-                    },
-                    bindings: {
-                      content: {
-                        mode: EValueMode.PARSE,
-                        condition: '输入内容：$.input_1',
-                      },
-                    },
                   },
                 ],
               },

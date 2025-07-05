@@ -27,11 +27,6 @@ const props = withDefaults(defineProps<IProps>(), {
 });
 
 const containerStyle = computed(() => {
-  console.log('~~ BaseContainer containerStyle', {
-    useFlex: props.useFlex,
-    cssStyle: props.cssStyle,
-    cssClass: props.cssClass,
-  });
   if (props.useFlex) {
     return {
       display: 'flex',
@@ -48,11 +43,6 @@ const containerStyle = computed(() => {
   }
 
   return {};
-});
-
-console.log('~~ BaseContainer', {
-  containerStyle: containerStyle.value,
-  cssClass: props.cssClass,
 });
 </script>
 

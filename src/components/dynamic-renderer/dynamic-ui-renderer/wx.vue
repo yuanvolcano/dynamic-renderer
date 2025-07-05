@@ -21,16 +21,16 @@ interface IProps {
 
 const props = defineProps<IProps>();
 
-console.log('~~ DynamicUIRenderer');
-
 // 处理数据绑定
-const getBindingValue = (binding: TValueCondition) => {
-  return parseModeValue(
+const getBindingValue = (binding: TValueCondition, propName?: string) => {
+  const result = parseModeValue(
     binding,
     props.dynamicContext.componentStates,
     props.dynamicContext.globalState,
     props.dynamicContext.utils.createParseContext()
   );
+
+  return result;
 };
 
 // 构建组件属性
@@ -46,7 +46,7 @@ const buildComponentProps = (config: IComponentConfig) => {
     Object.entries(config.bindings).forEach(([propName, binding]) => {
       // 跳过 class 和 style 的绑定，单独处理
       if (propName !== 'class' && propName !== 'style') {
-        componentProps[propName] = getBindingValue(binding);
+        componentProps[propName] = getBindingValue(binding, propName);
       }
     });
   }
@@ -96,12 +96,12 @@ const mergedStyle = computed(() => {
 
 // 获取当前组件的模型值
 const modelValue = computed(() => {
-  return props.dynamicContext.componentStates[props.config.id] as any;
+  const state = props.dynamicContext.utils.getComponentState(props.config.id) as any;
+  return state;
 });
 
 // 处理事件 - 支持异步和顺序执行
 const handleEvent = async (eventType: string, $event: any, config: IComponentConfig) => {
-  console.log('~~ handleEvent', eventType, $event, config);
   if (!config.events || !config.events[eventType]) {
     return;
   }
@@ -196,32 +196,15 @@ const hasChildren = computed(() => {
 });
 
 const isBaseButton = computed(() => {
-  const result = props.config.componentName === 'BaseButton';
-  console.log('~~ isBaseButton', {
-    isBaseButton: result,
-    isVisible: isVisible.value,
-    config: props.config,
-  });
-  return result;
+  return props.config.componentName === 'BaseButton';
 });
 
 const isBaseText = computed(() => {
-  const result = props.config.componentName === 'BaseText';
-  console.log('~~ isBaseText', {
-    isBaseText: result,
-    isVisible: isVisible.value,
-    config: props.config,
-  });
-  return result;
+  return props.config.componentName === 'BaseText';
 });
 
 const isBaseContainer = computed(() => {
   const result = props.config.componentName === 'BaseContainer';
-  console.log('~~ isBaseContainer', {
-    isBaseContainer: result,
-    isVisible: isVisible.value,
-    config: props.config,
-  });
   return result;
 });
 
@@ -541,6 +524,7 @@ const isBaseTextarea = computed(() => {
   <BaseTextarea
     v-else-if="isBaseTextarea"
     v-bind="buildComponentProps(config)"
+    :modelValue="modelValue"
     :css-style="mergedStyle"
     :css-class="mergedClass"
     @click="handleClick($event, config)"

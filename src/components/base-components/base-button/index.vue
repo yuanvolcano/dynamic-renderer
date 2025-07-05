@@ -128,13 +128,6 @@ const handleClick = (event: any) => {
     emits('click', event);
   }
 };
-
-console.log('~~ BaseButton buttonClass', {
-  buttonClass: buttonClass.value,
-  cssClass: props.cssClass,
-  buttonStyle: buttonStyle.value,
-  cssStyle: props.cssStyle,
-});
 </script>
 
 <template>

@@ -63,7 +63,7 @@ export function useContextUtils(
 
   // 获取组件状态
   const getComponentState = (componentId: string): IComponentState => {
-    return componentStates[componentId] || {};
+    return componentStates[componentId] || null;
   };
 
   // 更新状态
@@ -196,8 +196,11 @@ export function useContextUtils(
         break;
 
       case 'showToast':
-        console.log('~~ handleEvent showToast', handler.payload);
         uni.showToast(handler.payload);
+        break;
+
+      case 'resetState':
+        resetState();
         break;
 
       case 'custom':
@@ -249,7 +252,7 @@ export function useContextUtils(
 
   // 重置状态
   const resetState = (_config?: IComponentConfig[] | IComponentConfig): void => {
-    console.log('~~ resetState');
+    console.log('~~ resetState before', JSON.parse(JSON.stringify(componentStates)));
     const _configs = _config ? (Array.isArray(_config) ? _config : [_config]) : configs.value;
 
     // 清空并重新检查组件 ID
@@ -257,6 +260,7 @@ export function useContextUtils(
     _configs.forEach(item => {
       _processConfig(item);
     });
+    console.log('~~ resetState after', JSON.parse(JSON.stringify(componentStates)));
   };
 
   // 设置全局事件处理器

@@ -26,6 +26,8 @@ export default defineConfig({
     'h-12',
     'h-60',
     'w-[120px]',
+    'w-[200px]',
+    'w-[20vw]',
     'h-[60px]',
     'flex',
     'flex-1',

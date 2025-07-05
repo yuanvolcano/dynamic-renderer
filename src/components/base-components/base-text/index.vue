@@ -31,8 +31,6 @@ const textStyle = computed(() => {
     ...(props.cssStyle || {}),
   };
 });
-
-console.log('~~ BaseText', props.content);
 </script>
 
 <template>
