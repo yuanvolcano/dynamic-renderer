@@ -27,8 +27,6 @@ const props = withDefaults(defineProps<IProps>(), {
   cssStyle: () => ({}),
 });
 
-console.log('~~ BaseButton', props);
-
 const emits = defineEmits<{
   click: [event: any];
 }>();

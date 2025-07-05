@@ -22,8 +22,6 @@ const props = withDefaults(defineProps<IConfigPageProps>(), {
   debugStyle: 'simple',
 });
 
-console.log('~~ ConfigPageContainer props', props);
-
 // 状态管理
 const loading = ref(false);
 const error = ref<string>('');
@@ -136,11 +134,8 @@ const clearError = () => {
   error.value = '';
 };
 
-console.log('~~ onMounted before', isDevelopmentBol);
-
 // 页面挂载时加载配置
 onMounted(async () => {
-  console.log('~~ onMounted', isDevelopmentBol);
   if (isDevelopmentBol) {
     console.log(`${props.pageId}: 开发模式 - 使用本地配置`);
     await useLocalConfig();

@@ -54,14 +54,12 @@ const containerStyle = computed(() => {
 const handleSingleChange = (e: any) => {
   const selectedValues = e.detail.value;
   const isChecked = selectedValues.includes('checked');
-  console.log('~~ BaseCheckbox single handleChange', selectedValues, isChecked);
   emits('update:modelValue', isChecked);
 };
 
 // 复选框组变化处理
 const handleGroupChange = (e: any) => {
   const selectedValues = e.detail.value;
-  console.log('~~ BaseCheckbox group handleChange', selectedValues);
   emits('update:modelValue', selectedValues);
 };
 

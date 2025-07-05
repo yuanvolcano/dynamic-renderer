@@ -252,7 +252,6 @@ export function useContextUtils(
 
   // 重置状态
   const resetState = (_config?: IComponentConfig[] | IComponentConfig): void => {
-    console.log('~~ resetState before', JSON.parse(JSON.stringify(componentStates)));
     const _configs = _config ? (Array.isArray(_config) ? _config : [_config]) : configs.value;
 
     // 清空并重新检查组件 ID
@@ -260,7 +259,6 @@ export function useContextUtils(
     _configs.forEach(item => {
       _processConfig(item);
     });
-    console.log('~~ resetState after', JSON.parse(JSON.stringify(componentStates)));
   };
 
   // 设置全局事件处理器
